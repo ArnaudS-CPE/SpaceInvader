@@ -4,13 +4,15 @@
 # TODO :
 
 from tkinter import *
-
+import time 
 
 x = 10
 y = 700
+x2 = x +(50/2)
+y2 = y
 
 def evenement(event):
-    global x,y
+    global x,y,y2,x2
     touche = event.keysym
     print(touche)
     if touche == 'Right':
@@ -28,16 +30,17 @@ def evenement(event):
             canevas.coords(Vaisseau, x,y,x+50,y+30)
     
     if touche == "space":
-        x2 = x +(50/2)
-        y2 = y
-        Tir = canevas.create_rectangle(100,100,103,92, fill = "black")
-        while True:
-            if y2-6 <=0:
-                break
-            y2 -= 6
-
-            canevas.coords(Tir,x2,y2,x2,y2-6)
-
+        Tir = canevas.create_rectangle(x2,y2,x2,y2-6, fill = "black")
+        tir(Tir)
+        
+def tir(Tir):
+    global x2,y2
+    if y2 <=0:
+        pass
+    else:
+        y2 -= 6
+        canevas.coords(Tir,x2,y2,x2,y2-6)
+        mw.after(30,lambda:[tir(Tir)])
 
 mw = Tk()
 mw.geometry("1000x800")
