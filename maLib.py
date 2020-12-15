@@ -46,15 +46,15 @@ def evenement(event):
         posXTir = x +(50/2)
         posYTir = y
         Tir = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
-        tir(Tir, posXTir, posYTir)
+        movementTir(Tir, posXTir, posYTir)
         
-def tir(Tir, posXTir,posYTir):
+def movementTir(Tir, posXTir,posYTir):
     if posYTir <=0:
         pass
     else:
         posYTir -= 6
         canevas.coords(Tir,posXTir,posYTir,posXTir,posYTir-6)
-        mw.after(30,lambda:[tir(Tir,posXTir,posYTir)])
+        mw.after(30,lambda:[movementTir(Tir,posXTir,posYTir)])
 
 mw = Tk()
 mw.geometry("1000x800")
