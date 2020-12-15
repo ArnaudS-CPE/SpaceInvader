@@ -22,6 +22,9 @@
 # • Permettre à l’utilisateur de changer les touches de contrôle
 # • Mettre des cheat codes afin de gagner des vies supplémentaires
 # • Laisser parler votre imagination et n’hésitez pas à demander conseil à vos ainés qui auraient perdu un temps précieux à jouer à ce jeu ! 
+#
+# Changer les variables "X", "Y" et "DX" pour que la fonction de déplacement alien et Alien se fassent bien
+#
 
 from tkinter import *
 import time 
