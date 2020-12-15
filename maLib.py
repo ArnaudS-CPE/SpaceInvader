@@ -9,7 +9,7 @@ from tkinter import *
 x = 10
 y = 790
 
-def bouger(self):
+def bouger(event):
     global x,y
     touche = event.keysym
     print(touche)
