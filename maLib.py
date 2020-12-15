@@ -6,8 +6,23 @@
 from tkinter import *
 import time 
 
+LargeurCanevas = 900
+HauteurCanevas = 800
 x = 10
 y = 700
+DX=3
+
+def deplacementAlien () :
+    global X, Y, DX
+    if X+12+DX > LargeurCanevas :
+        X = 2*(LargeurCanevas-12)-X
+        DX = -DX        
+    if X-12+DX < 0:
+        X = 2*12-X
+        DX = -DX
+    X=X+DX
+    canevas.coords(Alien, X-12, Y-12, X+12, Y+12)
+    mw.after(20,deplacementAlien)
 
 def evenement(event):
     global x,y
@@ -45,11 +60,12 @@ mw = Tk()
 mw.geometry("1000x800")
 quit = Button(mw, text = "Quitter", command = mw.destroy)
 quit.pack()
-canevas = Canvas(mw, width = "900", height = "800", bg = "grey")
+canevas = Canvas(mw, width = LargeurCanevas, height = HauteurCanevas, bg = "grey")
 canevas.pack(padx = 5, pady = 5)
 Vaisseau = canevas.create_rectangle(x, y, x+50, y+30, width=2, outline='red', fill='white')
 canevas.focus_set()
 canevas.bind('<Key>',evenement)
+# Alien = canevas.create_oval(X-12, Y-12, X+12, Y+12, width=3, outline='green', fill='yellow')
 
 mw.mainloop()
 
