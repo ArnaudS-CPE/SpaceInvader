@@ -8,11 +8,9 @@ import time
 
 x = 10
 y = 700
-x2 = x +(50/2)
-y2 = y
 
 def evenement(event):
-    global x,y,y2,x2
+    global x,y
     touche = event.keysym
     print(touche)
     if touche == 'Right':
@@ -30,17 +28,18 @@ def evenement(event):
             canevas.coords(Vaisseau, x,y,x+50,y+30)
     
     if touche == "space":
+        x2 = x +(50/2)
+        y2 = y
         Tir = canevas.create_rectangle(x2,y2,x2,y2-6, fill = "black")
-        tir(Tir)
+        tir(Tir, x2, y2)
         
-def tir(Tir):
-    global x2,y2
+def tir(Tir, x2,y2):
     if y2 <=0:
         pass
     else:
         y2 -= 6
         canevas.coords(Tir,x2,y2,x2,y2-6)
-        mw.after(30,lambda:[tir(Tir)])
+        mw.after(30,lambda:[tir(Tir,x2,y2)])
 
 mw = Tk()
 mw.geometry("1000x800")
