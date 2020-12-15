@@ -12,13 +12,19 @@ y = 700
 def bouger(event):
     global x,y
     touche = event.keysym
-    print(touche)
     if touche == 'Right':
-        x += 6
-        canevas.coords(Vaisseau, x,y,x+50,y+30)
+        if x+50 >= 900:
+            pass
+        else:
+            x += 6
+            canevas.coords(Vaisseau, x,y,x+50,y+30)
+    
     if touche == 'Left':
-        x -= 6
-        canevas.coords(Vaisseau, x,y,x+50,y+30)
+        if x <= 4:
+            pass
+        else:
+            x -= 6
+            canevas.coords(Vaisseau, x,y,x+50,y+30)
 
 
 mw = Tk()
