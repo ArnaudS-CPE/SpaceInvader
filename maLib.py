@@ -1,7 +1,12 @@
 # BURLOT Alexandre, SIBENALER Arnaud
 # début du projet le 15/12/2020
 # Objectif : bibliothèque de fonctions pour le space invader
-# TODO :
+# TODO : lien du sujet du tp : https://prod.e-campus.cpe.fr/pluginfile.php/53617/mod_resource/content/1/TP3.pdf
+# Gerer la collision entre le tir et l'Alien, ils doivent tous les deux disparaitres
+# permettre à l'alien de descendre petit à petit lorsqu'il à fait un allé retour
+# Si l'allien arrive au niveau du vaisseau et le touche, le vaiseau est détruit et la partie est terminée
+# mettre maintenant plusieur aliens sur la meme ligne et verifier quetout se passe bien
+# 
 
 from tkinter import *
 import time 
