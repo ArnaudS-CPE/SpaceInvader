@@ -43,18 +43,18 @@ def evenement(event):
             canevas.coords(Vaisseau, x,y,x+50,y+30)
     
     if touche == "space":
-        x2 = x +(50/2)
-        y2 = y
-        Tir = canevas.create_rectangle(x2,y2,x2,y2-6, fill = "black")
-        tir(Tir, x2, y2)
+        posXTir = x +(50/2)
+        posYTir = y
+        Tir = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
+        tir(Tir, posXTir, posYTir)
         
-def tir(Tir, x2,y2):
-    if y2 <=0:
+def tir(Tir, posXTir,posYTir):
+    if posYTir <=0:
         pass
     else:
-        y2 -= 6
-        canevas.coords(Tir,x2,y2,x2,y2-6)
-        mw.after(30,lambda:[tir(Tir,x2,y2)])
+        posYTir -= 6
+        canevas.coords(Tir,posXTir,posYTir,posXTir,posYTir-6)
+        mw.after(30,lambda:[tir(Tir,posXTir,posYTir)])
 
 mw = Tk()
 mw.geometry("1000x800")
