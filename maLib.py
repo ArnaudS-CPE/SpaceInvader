@@ -30,12 +30,13 @@ def evenement(event):
     if touche == "space":
         x2 = x +(50/2)
         y2 = y
-        canevas.create_line(100,100,100,92,fill = "blue")
+        Tir = canevas.create_rectangle(100,100,103,92, fill = "black")
         while True:
             if y2-6 <=0:
                 break
             y2 -= 6
-            # canevas.coords(tir,x2,y2,x2,y2-6)
+
+            canevas.coords(Tir,x2,y2,x2,y2-6)
 
 
 mw = Tk()
