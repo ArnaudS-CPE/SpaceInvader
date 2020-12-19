@@ -36,17 +36,10 @@ DX=3
 posXAlien = 240
 posYAlien = 300
 
-class Window:
-
-    def __init__(self, geom, title):
-        self.__name = self
-        self.__geometry = geom
-        self.__title = title
-
 
 class Alien:
 
-    def __init__(self):
+    def __init__(self, height, width):
         self.__height = height
         self.__width = width
 
@@ -107,7 +100,7 @@ def movementTir(Tir, posXTir,posYTir):
     else:
         posYTir -= 6
         canevas.coords(Tir,posXTir,posYTir,posXTir,posYTir-6)
-        mw.after(30,lambda:[movementTir(Tir,posXTir,posYTir)])
+        mw.after(20,lambda:[movementTir(Tir,posXTir,posYTir)])
 
 # création de la fenetre
 mw = Tk()
