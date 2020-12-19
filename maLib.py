@@ -27,24 +27,54 @@
 #
 
 from tkinter import *
-import time 
 
 LargeurCanevas = 900
 HauteurCanevas = 800
 x = 10
 y = 700
 DX=3
+posXAlien = 240
+posYAlien = 300
+
+class Window:
+
+    def __init__(self, geom, title):
+        self.__name = self
+        self.__geometry = geom
+        self.__title = title
+
+
+class Alien:
+
+    def __init__(self):
+        self.__height = height
+        self.__width = width
+
+
+class Vaisseau:
+
+    def __init__(self,posX,posY):
+        self.__posX = posX
+        self.__posY = posY
+
+
+class Mur:
+
+    def __init__(self, height, width):
+        self.__height = height
+        self.__width = width
+
 
 def deplacementAlien () :
-    global X, Y, DX
-    if X+12+DX > LargeurCanevas :
-        X = 2*(LargeurCanevas-12)-X
+    global posXAlien, posYAlien, DX
+    if posXAlien+12+DX > LargeurCanevas :
+        posXAlien = 2*(LargeurCanevas-12)-posXAlien
         DX = -DX        
-    if X-12+DX < 0:
-        X = 2*12-X
+    if posXAlien-12+DX < 0:
+        posXAlien = 2*12-posXAlien
         DX = -DX
-    X=X+DX
-    canevas.coords(Alien, X-12, Y-12, X+12, Y+12)
+    posXAlien += DX
+    canevas.coords(Alien, posXAlien-12, posYAlien-12, posXAlien+12, posYAlien+12)
     mw.after(20,deplacementAlien)
 
 def evenement(event):
@@ -79,16 +109,24 @@ def movementTir(Tir, posXTir,posYTir):
         canevas.coords(Tir,posXTir,posYTir,posXTir,posYTir-6)
         mw.after(30,lambda:[movementTir(Tir,posXTir,posYTir)])
 
+# création de la fenetre
 mw = Tk()
 mw.geometry("1000x800")
+mw.title("Space Invaders")
+
+# création des widgets
 quit = Button(mw, text = "Quitter", command = mw.destroy)
 quit.pack()
 canevas = Canvas(mw, width = LargeurCanevas, height = HauteurCanevas, bg = "grey")
 canevas.pack(padx = 5, pady = 5)
+
+
 Vaisseau = canevas.create_rectangle(x, y, x+50, y+30, width=2, outline='red', fill='white')
 canevas.focus_set()
 canevas.bind('<Key>',evenement)
-# Alien = canevas.create_oval(X-12, Y-12, X+12, Y+12, width=3, outline='green', fill='yellow')
+Alien = canevas.create_oval(posXAlien-12, posYAlien-12, posXAlien+12, posYAlien+12, width=3, outline='green', fill='yellow')
+
+deplacementAlien()
 
 mw.mainloop()
 
