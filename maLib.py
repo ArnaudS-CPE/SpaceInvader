@@ -23,10 +23,9 @@
 # • Mettre des cheat codes afin de gagner des vies supplémentaires
 # • Laisser parler votre imagination et n’hésitez pas à demander conseil à vos ainés qui auraient perdu un temps précieux à jouer à ce jeu ! 
 #
-# Conctruction c'une base solide orientée objet
-# Faire une contition limite sur les déplacements du vaisseau
+# mettre une condition de sortie pour collision
 
-from tkinter import *
+from tkinter import Label, Canvas, Button, Tk, Entry
 
 LargeurCanevas = 900
 HauteurCanevas = 800
@@ -82,7 +81,6 @@ class Vaisseau:
                 pass
             else:
                 self.__posX += 6
-                print(self.__posX, self.__posY)
                 canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
         
         if touche == 'Left':
@@ -95,17 +93,25 @@ class Vaisseau:
         if touche == "space":
             posXTir = self.__posX + (self.__width//2)
             posYTir = self.__posY
-            Tir = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
-            self.movementTir(Tir, posXTir, posYTir)
+            tir = Tir(posXTir, posYTir)
+            del tir
         
-    def movementTir(self, Tir, posXTir,posYTir):
-        if posYTir <=0:
+
+class Tir:
+
+    def __init__(self, posXTir, posYTir):
+        self.__posX = posXTir
+        self.__posY = posYTir
+        self.__pattern = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
+        self.movementTir()
+
+    def movementTir(self):
+        if self.__posY <=0:
             pass
         else:
-            posYTir -= 6
-            canevas.coords(Tir, posXTir, posYTir, posXTir, posYTir-6)
-            mw.after(20,lambda:[self.movementTir(Tir, posXTir, posYTir)])
-
+            self.__posY -= 6
+            canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
+            mw.after(20,self.movementTir)
 
 class Mur:
 
