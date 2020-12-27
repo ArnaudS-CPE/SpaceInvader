@@ -114,37 +114,6 @@ class Mur:
         self.__width = width
 
 
-# def evenement(event):
-#     global x,y
-#     touche = event.keysym
-#     print(touche)
-#     if touche == 'Right':
-#         if x+50 >= 900:
-#             pass
-#         else:
-#             x += 6
-#             canevas.coords(Vaisseau, x,y,x+50,y+30)
-    
-#     if touche == 'Left':
-#         if x <= 4:
-#             pass
-#         else:
-#             x -= 6
-#             canevas.coords(Vaisseau, x,y,x+50,y+30)
-    
-#     if touche == "space":
-#         posXTir = x +(50/2)
-#         posYTir = y
-#         Tir = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
-#         movementTir(Tir, posXTir, posYTir)
-        
-# def movementTir(Tir, posXTir,posYTir):
-#     if posYTir <=0:
-#         pass
-#     else:
-#         posYTir -= 6
-#         canevas.coords(Tir,posXTir,posYTir,posXTir,posYTir-6)
-#         mw.after(20,lambda:[movementTir(Tir,posXTir,posYTir)])
 
 # création de la fenetre
 mw = Tk()
@@ -163,7 +132,6 @@ canevas.focus_set()
 canevas.bind('<Key>',vaisseau.evenement)
 
 alien = Alien(posXAlien, posYAlien, 50, 50)
-# Alien = canevas.create_rectangle(posXAlien-12, posYAlien-12, posXAlien+12, posYAlien+12, width=3, outline='green', fill='yellow') # a changer
 
 alien.deplacementAlien()
 
