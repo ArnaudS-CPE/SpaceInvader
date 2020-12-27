@@ -23,21 +23,22 @@
 # • Mettre des cheat codes afin de gagner des vies supplémentaires
 # • Laisser parler votre imagination et n’hésitez pas à demander conseil à vos ainés qui auraient perdu un temps précieux à jouer à ce jeu ! 
 #
-# mettre une condition de sortie pour collision
+# 
+# 
+# 
+#  
+# La collision est detectée, il manque la suppression des deux objets dans la condition de collision
 
 from tkinter import Label, Canvas, Button, Tk, Entry
 
 LargeurCanevas = 900
 HauteurCanevas = 800
-x = 10
-y = 700
 DX=3
-posXAlien = 240
-posYAlien = 300
+dicoalien = {} # contient les objets aliens et leurs informations 
 
 
 class Alien:
-    global LargeurCanevas, HauteurCanevas
+    global LargeurCanevas, HauteurCanevas, dicoalien
 
     def __init__(self, posX, posY, height, width):
         self.__height = height
@@ -69,7 +70,7 @@ class Alien:
         self.__posX += DX
         canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
         mw.after(20,self.deplacementAlien)
-
+        dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height]
 
 class Vaisseau:
     global LargeurCanevas, HauteurCanevas
@@ -107,7 +108,7 @@ class Vaisseau:
         
 
 class Tir:
-
+    global dicoalien
     def __init__(self, posXTir, posYTir):
         self.__posX = posXTir
         self.__posY = posYTir
@@ -115,9 +116,12 @@ class Tir:
         self.movementTir()
 
     def movementTir(self):
+        if self.__posX > dicoalien.get(alien1)[0] and self.__posX < dicoalien.get(alien1)[0]+dicoalien.get(alien1)[2] and self.__posY > dicoalien.get(alien1)[1] and self.__posY < dicoalien.get(alien1)[1]+dicoalien.get(alien1)[3]:
+            canevas.delete(self.__pattern)
+            return
         if self.__posY <=0:
-            pass
-        else:
+            return
+        if True:
             self.__posY -= 6
             canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
             mw.after(20,self.movementTir)
@@ -133,7 +137,7 @@ class Mur:
 # création de la fenetre
 mw = Tk()
 mw.geometry("1000x800")
-mw.title("Space Invaders")
+mw.title("Space Invader")
 
 # création des widgets
 quit = Button(mw, text = "Quitter", command = mw.destroy)
@@ -146,9 +150,9 @@ vaisseau = Vaisseau(10,700)
 canevas.focus_set()
 canevas.bind('<Key>',vaisseau.evenement)
 
-alien = Alien(posXAlien, posYAlien, 50, 50)
+alien1 = Alien(240, 300, 50, 50)
 
-alien.deplacementAlien()
+alien1.deplacementAlien()
 
 mw.mainloop()
 
