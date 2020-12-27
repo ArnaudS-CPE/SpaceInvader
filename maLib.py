@@ -39,9 +39,27 @@ posYAlien = 300
 
 class Alien:
 
-    def __init__(self, height, width):
+    def __init__(self, posX, posY, height, width):
         self.__height = height
         self.__width = width
+        self.__posX = posX
+        self.__posY = posY
+        self.__pattern = canevas.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='green', fill='yellow')
+    
+    def get_pos(self):
+        return(self.__posX, self.__posY)
+    
+    def deplacementAlien(self) :
+        global DX, LargeurCanevas
+        if self.__posX+self.__width > LargeurCanevas :
+            self.__posX = LargeurCanevas-self.__width
+            DX = -DX        
+        if self.__posX < 0:
+            self.__posX = 0
+            DX = -DX
+        self.__posX += DX
+        canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
+        mw.after(20,self.deplacementAlien)
 
 
 class Vaisseau:
@@ -58,49 +76,49 @@ class Mur:
         self.__width = width
 
 
-def deplacementAlien () :
-    global posXAlien, posYAlien, DX
-    if posXAlien+12+DX > LargeurCanevas :
-        posXAlien = 2*(LargeurCanevas-12)-posXAlien
-        DX = -DX        
-    if posXAlien-12+DX < 0:
-        posXAlien = 2*12-posXAlien
-        DX = -DX
-    posXAlien += DX
-    canevas.coords(Alien, posXAlien-12, posYAlien-12, posXAlien+12, posYAlien+12)
-    mw.after(20,deplacementAlien)
+# def deplacementAlien () :
+#     global posXAlien, posYAlien, DX
+#     if posXAlien+12+DX > LargeurCanevas :
+#         posXAlien = 2*(LargeurCanevas-12)-posXAlien
+#         DX = -DX        
+#     if posXAlien-12+DX < 0:
+#         posXAlien = 2*12-posXAlien
+#         DX = -DX
+#     posXAlien += DX
+#     canevas.coords(Alien, posXAlien-12, posYAlien-12, posXAlien+12, posYAlien+12)
+#     mw.after(20,deplacementAlien)
 
-def evenement(event):
-    global x,y
-    touche = event.keysym
-    print(touche)
-    if touche == 'Right':
-        if x+50 >= 900:
-            pass
-        else:
-            x += 6
-            canevas.coords(Vaisseau, x,y,x+50,y+30)
+# def evenement(event):
+#     global x,y
+#     touche = event.keysym
+#     print(touche)
+#     if touche == 'Right':
+#         if x+50 >= 900:
+#             pass
+#         else:
+#             x += 6
+#             canevas.coords(Vaisseau, x,y,x+50,y+30)
     
-    if touche == 'Left':
-        if x <= 4:
-            pass
-        else:
-            x -= 6
-            canevas.coords(Vaisseau, x,y,x+50,y+30)
+#     if touche == 'Left':
+#         if x <= 4:
+#             pass
+#         else:
+#             x -= 6
+#             canevas.coords(Vaisseau, x,y,x+50,y+30)
     
-    if touche == "space":
-        posXTir = x +(50/2)
-        posYTir = y
-        Tir = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
-        movementTir(Tir, posXTir, posYTir)
+#     if touche == "space":
+#         posXTir = x +(50/2)
+#         posYTir = y
+#         Tir = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
+#         movementTir(Tir, posXTir, posYTir)
         
-def movementTir(Tir, posXTir,posYTir):
-    if posYTir <=0:
-        pass
-    else:
-        posYTir -= 6
-        canevas.coords(Tir,posXTir,posYTir,posXTir,posYTir-6)
-        mw.after(20,lambda:[movementTir(Tir,posXTir,posYTir)])
+# def movementTir(Tir, posXTir,posYTir):
+#     if posYTir <=0:
+#         pass
+#     else:
+#         posYTir -= 6
+#         canevas.coords(Tir,posXTir,posYTir,posXTir,posYTir-6)
+#         mw.after(20,lambda:[movementTir(Tir,posXTir,posYTir)])
 
 # création de la fenetre
 mw = Tk()
@@ -114,12 +132,14 @@ canevas = Canvas(mw, width = LargeurCanevas, height = HauteurCanevas, bg = "grey
 canevas.pack(padx = 5, pady = 5)
 
 
-Vaisseau = canevas.create_rectangle(x, y, x+50, y+30, width=2, outline='red', fill='white')
-canevas.focus_set()
-canevas.bind('<Key>',evenement)
-Alien = canevas.create_oval(posXAlien-12, posYAlien-12, posXAlien+12, posYAlien+12, width=3, outline='green', fill='yellow')
+# Vaisseau = canevas.create_rectangle(x, y, x+50, y+30, width=2, outline='red', fill='white')
+# canevas.focus_set()
+# canevas.bind('<Key>',evenement)
 
-deplacementAlien()
+alien = Alien(posXAlien, posYAlien, 50, 50)
+# Alien = canevas.create_rectangle(posXAlien-12, posYAlien-12, posXAlien+12, posYAlien+12, width=3, outline='green', fill='yellow') # a changer
+
+alien.deplacementAlien()
 
 mw.mainloop()
 
