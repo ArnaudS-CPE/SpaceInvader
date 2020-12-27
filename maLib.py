@@ -76,18 +76,6 @@ class Mur:
         self.__width = width
 
 
-# def deplacementAlien () :
-#     global posXAlien, posYAlien, DX
-#     if posXAlien+12+DX > LargeurCanevas :
-#         posXAlien = 2*(LargeurCanevas-12)-posXAlien
-#         DX = -DX        
-#     if posXAlien-12+DX < 0:
-#         posXAlien = 2*12-posXAlien
-#         DX = -DX
-#     posXAlien += DX
-#     canevas.coords(Alien, posXAlien-12, posYAlien-12, posXAlien+12, posYAlien+12)
-#     mw.after(20,deplacementAlien)
-
 # def evenement(event):
 #     global x,y
 #     touche = event.keysym
