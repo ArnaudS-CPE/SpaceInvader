@@ -46,8 +46,17 @@ class Alien:
         self.__posY = posY
         self.__pattern = canevas.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='green', fill='yellow')
     
-    def get_pos(self):
-        return(self.__posX, self.__posY)
+    def get_posX(self):
+        return self.__posX
+    
+    def get_posY(self):
+        return self.__posY
+    
+    def get_height(self):
+        return self.__height
+
+    def get_width(self):
+        return self.__width
     
     def deplacementAlien(self) :
         global DX
