@@ -24,7 +24,7 @@
 # • Laisser parler votre imagination et n’hésitez pas à demander conseil à vos ainés qui auraient perdu un temps précieux à jouer à ce jeu ! 
 #
 # Conctruction c'une base solide orientée objet
-#
+# Faire une contition limite sur les déplacements du vaisseau
 
 from tkinter import *
 
@@ -38,6 +38,7 @@ posYAlien = 300
 
 
 class Alien:
+    global LargeurCanevas, HauteurCanevas
 
     def __init__(self, posX, posY, height, width):
         self.__height = height
@@ -50,11 +51,11 @@ class Alien:
         return(self.__posX, self.__posY)
     
     def deplacementAlien(self) :
-        global DX, LargeurCanevas
+        global DX
         if self.__posX+self.__width > LargeurCanevas :
             self.__posX = LargeurCanevas-self.__width
             DX = -DX        
-        if self.__posX < 0:
+        if self.__posX < 3:
             self.__posX = 0
             DX = -DX
         self.__posX += DX
@@ -63,10 +64,47 @@ class Alien:
 
 
 class Vaisseau:
+    global LargeurCanevas, HauteurCanevas
 
-    def __init__(self,posX,posY):
+    def __init__(self, posX, posY):
         self.__posX = posX
         self.__posY = posY
+        self.__height = 50
+        self.__width = 100
+        self.__pattern = canevas.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, 
+            width=2, outline='red', fill='white')
+    
+    def evenement(self, event):
+        touche = event.keysym
+        print(touche)
+        if touche == 'Right':
+            if self.__posX+self.__width >= LargeurCanevas:
+                pass
+            else:
+                self.__posX += 6
+                print(self.__posX, self.__posY)
+                canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
+        
+        if touche == 'Left':
+            if self.__posX <= 4:
+                pass
+            else:
+                self.__posX -= 6
+                canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
+        
+        if touche == "space":
+            posXTir = self.__posX + (self.__width//2)
+            posYTir = self.__posY
+            Tir = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
+            self.movementTir(Tir, posXTir, posYTir)
+        
+    def movementTir(self, Tir, posXTir,posYTir):
+        if posYTir <=0:
+            pass
+        else:
+            posYTir -= 6
+            canevas.coords(Tir, posXTir, posYTir, posXTir, posYTir-6)
+            mw.after(20,lambda:[self.movementTir(Tir, posXTir, posYTir)])
 
 
 class Mur:
@@ -120,9 +158,9 @@ canevas = Canvas(mw, width = LargeurCanevas, height = HauteurCanevas, bg = "grey
 canevas.pack(padx = 5, pady = 5)
 
 
-# Vaisseau = canevas.create_rectangle(x, y, x+50, y+30, width=2, outline='red', fill='white')
-# canevas.focus_set()
-# canevas.bind('<Key>',evenement)
+vaisseau = Vaisseau(10,700)
+canevas.focus_set()
+canevas.bind('<Key>',vaisseau.evenement)
 
 alien = Alien(posXAlien, posYAlien, 50, 50)
 # Alien = canevas.create_rectangle(posXAlien-12, posYAlien-12, posXAlien+12, posYAlien+12, width=3, outline='green', fill='yellow') # a changer
