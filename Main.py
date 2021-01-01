@@ -28,13 +28,13 @@ from tkinter import *
 
 LargeurCanevas = 480
 HauteurCanevas = 320
-X=50
-Y=50
-x=240
-y=300
+X = 50
+Y = 50
+x = 240
+y = 300
 
-DX=4
-DY=3
+DX = 4
+DY = 50
 
 dicoalien = {} # contient les objets aliens et leurs informations 
 
@@ -71,6 +71,9 @@ class Alien :
             self.__posX = 0
             self.__posY += DY
             DX = -DX
+        if self.__posY > 250 :
+            canevas.delete(self.__pattern)
+            canevas.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
         self.__posX += DX
         canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
         mw.after(20,self.deplacementAlien)
@@ -121,6 +124,7 @@ class Tir:
     def movementTir(self):
         if self.__posX > dicoalien.get(alien1)[0] and self.__posX < dicoalien.get(alien1)[0]+dicoalien.get(alien1)[2] and self.__posY > dicoalien.get(alien1)[1] and self.__posY < dicoalien.get(alien1)[1]+dicoalien.get(alien1)[3]:
             canevas.delete(self.__pattern)
+            canevas.delete(Alien)
             return
         if self.__posY <=0:
             return
