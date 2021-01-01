@@ -3,13 +3,12 @@
 # Objectif : réalisation d'un space invader sous Tkinter
 # TODO : lien du sujet du tp : https://prod.e-campus.cpe.fr/pluginfile.php/53617/mod_resource/content/1/TP3.pdf
 # Gerer la collision entre le tir et l'Alien, ils doivent tous les deux disparaitres
-# permettre à l'alien de descendre petit à petit lorsqu'il à fait un allé retour
 # Si l'allien arrive au niveau du vaisseau et le touche, le vaiseau est détruit et la partie est terminée
 # mettre maintenant plusieur aliens sur la meme ligne et verifier quetout se passe bien
 # permettre aux aliens de tirer vers le bas, le déclenchement est aléatoire, même vitesse que ceux du vaiseau
 # si un tir alien atteint le vaiseau, les deux sont détruits et la partie est finie
 # faire 3 vies pour le joueur et lui afficher
-# créer des ilots pour que le vaisseau puisse se cacher, se détruisent petità petit si ils subissent un tir alien
+# créer des ilots pour que le vaisseau puisse se cacher, se détruisent petit à petit si ils subissent un tir alien
 # Faire apparaitre un ennemi bonus et gerer son état
 # introduire les scores transformer les aliens soit en formes simples soit en images
 # barre du menu
@@ -34,9 +33,10 @@ x = 240
 y = 300
 
 DX = 4
-DY = 50
+DY = 3
 
 dicoalien = {} # contient les objets aliens et leurs informations 
+dicotir = {} # contient les objets tirs et leurs informations
 
 
 class Alien :
@@ -118,7 +118,7 @@ class Tir:
     def __init__(self, posXTir, posYTir):
         self.__posX = posXTir
         self.__posY = posYTir
-        self.__pattern = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
+        self.__pattern = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir-7, fill = "black")
         self.movementTir()
 
     def movementTir(self):
@@ -129,9 +129,10 @@ class Tir:
         if self.__posY <=0:
             return
         if True:
-            self.__posY -= 6
+            self.__posY -= 7
             canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
             mw.after(20,self.movementTir)
+        dicotir[self] = [self.__posX, self.__posY]
 
 
 # création de la fenêtre principale
