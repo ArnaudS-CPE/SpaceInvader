@@ -26,14 +26,20 @@
 # 
 # 
 # 
-#  
-# La collision est detectée, il manque la suppression des deux objets dans la condition de collision
+# L'alien le plus à gauche ne suit pas bien le déplacement vers le bas
+# L'alien le plus a droite se décale de plus en plus vers la gauche, pas de façon normale
+# La collision est detectée, il manque la suppression des deux objets dans la condition de collision (début de piste ligne avec 
+# la condition if dicoalien[self] == None: )
+
 
 from tkinter import Label, Canvas, Button, Tk, Entry
 
 LargeurCanevas = 900
-HauteurCanevas = 800
-DX=3
+HauteurCanevas = 700
+
+DX=4
+DY=20
+
 dicoalien = {} # contient les objets aliens et leurs informations 
 
 
@@ -46,12 +52,17 @@ class Alien:
         self.__posX = posX
         self.__posY = posY
         self.__pattern = canevas.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='green', fill='yellow')
-    
+        dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height]
+        self.deplacementAlien()
+
     def get_posX(self):
         return self.__posX
     
     def get_posY(self):
         return self.__posY
+    
+    def set_posY(self, newPosY):
+        self.__posY = newPosY
     
     def get_height(self):
         return self.__height
@@ -59,18 +70,30 @@ class Alien:
     def get_width(self):
         return self.__width
     
+    def get_pattern(self):
+        return self.__pattern
+    
     def deplacementAlien(self) :
         global DX
         if self.__posX+self.__width > LargeurCanevas :
             self.__posX = LargeurCanevas-self.__width
+            for key, value in dicoalien.items():
+                key.set_posY(self.__posY+DY)
             DX = -DX        
         if self.__posX < 3:
             self.__posX = 0
+            for key, value in dicoalien.items():
+                key.set_posY(self.__posY+DY)
             DX = -DX
+        if self.__posY > HauteurCanevas - 100:
+            canevas.delete(self.__pattern)
+            canevas.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
+        if dicoalien[self] == None:
+            canevas.delete(self.__pattern)
         self.__posX += DX
         canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
         mw.after(20,self.deplacementAlien)
-        dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height]
+        dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoalien
 
 class Vaisseau:
     global LargeurCanevas, HauteurCanevas
@@ -116,8 +139,11 @@ class Tir:
         self.movementTir()
 
     def movementTir(self):
+        # gère la collision du tir et d'un alien
         if self.__posX > dicoalien.get(alien1)[0] and self.__posX < dicoalien.get(alien1)[0]+dicoalien.get(alien1)[2] and self.__posY > dicoalien.get(alien1)[1] and self.__posY < dicoalien.get(alien1)[1]+dicoalien.get(alien1)[3]:
             canevas.delete(self.__pattern)
+            canevas.delete(alien1.get_pattern)
+            dicoalien[alien1] = None
             return
         if self.__posY <=0:
             return
@@ -136,23 +162,29 @@ class Mur:
 
 # création de la fenetre
 mw = Tk()
-mw.geometry("1000x800")
+mw.geometry(str(LargeurCanevas) + "x" + str(HauteurCanevas))
 mw.title("Space Invader")
+mw.minsize(HauteurCanevas,LargeurCanevas)
 
 # création des widgets
 quit = Button(mw, text = "Quitter", command = mw.destroy)
-quit.pack()
-canevas = Canvas(mw, width = LargeurCanevas, height = HauteurCanevas, bg = "grey")
+quit.pack(padx = 5, pady = 5)
+canevas = Canvas(mw, width = LargeurCanevas-20, height = HauteurCanevas-20, bg = "grey")
 canevas.pack(padx = 5, pady = 5)
 
 
-vaisseau = Vaisseau(10,700)
+vaisseau = Vaisseau(10,600)
 canevas.focus_set()
 canevas.bind('<Key>',vaisseau.evenement)
 
-alien1 = Alien(240, 300, 50, 50)
+alien1 = Alien(0, 10, 50, 50)
+alien2 = Alien(100, 10, 50, 50)
+alien3 = Alien(200, 10, 50, 50)
+alien4 = Alien(300, 10, 50, 50)
+alien5 = Alien(400, 10, 50, 50)
+alien6 = Alien(500, 10, 50, 50)
+alien7 = Alien(600, 10, 50, 50)
 
-alien1.deplacementAlien()
 
 mw.mainloop()
 
