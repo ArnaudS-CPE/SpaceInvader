@@ -89,7 +89,11 @@ class Alien:
             canevas.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
         if self not in dicoalien:
             canevas.delete(self.__pattern)
+            if dicoalien == {} :
+                canevas.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Partie gagnée")
+            return
         self.__posX += DX
+        print(dicoalien)
         canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
         mw.after(20,self.deplacementAlien)
         dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoalien
