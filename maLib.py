@@ -1,5 +1,6 @@
 # BURLOT Alexandre, SIBENALER Arnaud
 # début du projet le 15/12/2020
+# Lien GitHub : https://github.com/ArnaudS-CPE/SpaceInvader
 # Objectif : bibliothèque de fonctions pour le space invader
 # TODO : lien du sujet du tp : https://prod.e-campus.cpe.fr/pluginfile.php/53617/mod_resource/content/1/TP3.pdf
 # Gerer la collision entre le tir et l'Alien, ils doivent tous les deux disparaitres
