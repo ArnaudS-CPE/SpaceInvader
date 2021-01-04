@@ -11,7 +11,8 @@
 # faire 3 vies pour le joueur et lui afficher
 # créer des ilots pour que le vaisseau puisse se cacher, se détruisent petità petit si ils subissent un tir alien
 # Faire apparaitre un ennemi bonus et gerer son état
-# introduire les scores transformer les aliens soit en formes simples soit en images
+# introduire les scores 
+# transformer les aliens soit en formes simples soit en images
 # barre du menu
 # BONUS :
 # • Augmenter la vitesse des Aliens lorsqu’ils sont moins nombreux.
@@ -25,10 +26,10 @@
 #
 # 
 # 
-# 
 # L'alien le plus à gauche ne suit pas bien le déplacement vers le bas
 # L'alien le plus a droite se décale de plus en plus vers la gauche, pas de façon normale
 # Faire la condition de collision alien/ Vaisseau
+# problème déplacement alien collision à droite
 
 
 from tkinter import Label, Canvas, Button, Tk, Entry
@@ -109,6 +110,7 @@ class Vaisseau:
         self.__posY = posY
         self.__height = 50
         self.__width = 100
+        self.__vie = 3
         self.__pattern = canevas.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, 
             width=2, outline='red', fill='white')
     
@@ -158,6 +160,7 @@ class Tir:
             canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
             mw.after(20,self.movementTir)
 
+
 class Mur: # protections pour le vaisseau
 
     def __init__(self, height, width):
@@ -168,7 +171,7 @@ class Mur: # protections pour le vaisseau
 
 # création de la fenetre
 mw = Tk()
-mw.geometry(str(LargeurCanevas) + "x" + str(HauteurCanevas))
+mw.geometry(str(LargeurCanevas+20) + "x" + str(HauteurCanevas+20))
 mw.title("Space Invader")
 mw.minsize(HauteurCanevas,LargeurCanevas)
 
@@ -183,13 +186,13 @@ vaisseau = Vaisseau(10,600)
 canevas.focus_set()
 canevas.bind('<Key>',vaisseau.evenement)
 
-alien1 = Alien(0, 10, 50, 50)
-alien2 = Alien(100, 10, 50, 50)
-alien3 = Alien(200, 10, 50, 50)
-alien4 = Alien(300, 10, 50, 50)
-alien5 = Alien(400, 10, 50, 50)
-alien6 = Alien(500, 10, 50, 50)
-alien7 = Alien(600, 10, 50, 50)
+alien1 = Alien(10, 10, 50, 50)
+alien2 = Alien(110, 10, 50, 50)
+alien3 = Alien(210, 10, 50, 50)
+alien4 = Alien(310, 10, 50, 50)
+alien5 = Alien(410, 10, 50, 50)
+alien6 = Alien(510, 10, 50, 50)
+alien7 = Alien(610, 10, 50, 50)
 
 
 mw.mainloop()
