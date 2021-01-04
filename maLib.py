@@ -28,8 +28,7 @@
 # 
 # L'alien le plus à gauche ne suit pas bien le déplacement vers le bas
 # L'alien le plus a droite se décale de plus en plus vers la gauche, pas de façon normale
-# La collision est detectée, il manque la suppression des deux objets dans la condition de collision (début de piste ligne avec 
-# la condition if dicoalien[self] == None: )
+# La collision est detectée, l'alien est visuellement supprimé mais le déplacement alien s'effectue toujours
 
 
 from tkinter import Label, Canvas, Button, Tk, Entry
@@ -88,7 +87,7 @@ class Alien:
         if self.__posY > HauteurCanevas - 100:
             canevas.delete(self.__pattern)
             canevas.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
-        if dicoalien[self] == None:
+        if self not in dicoalien:
             canevas.delete(self.__pattern)
         self.__posX += DX
         canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
@@ -140,11 +139,11 @@ class Tir:
 
     def movementTir(self):
         # gère la collision du tir et d'un alien
-        if self.__posX > dicoalien.get(alien1)[0] and self.__posX < dicoalien.get(alien1)[0]+dicoalien.get(alien1)[2] and self.__posY > dicoalien.get(alien1)[1] and self.__posY < dicoalien.get(alien1)[1]+dicoalien.get(alien1)[3]:
-            canevas.delete(self.__pattern)
-            canevas.delete(alien1.get_pattern)
-            dicoalien[alien1] = None
-            return
+        for key, value in dicoalien.items():
+            if self.__posX > dicoalien.get(key)[0] and self.__posX < dicoalien.get(key)[0]+dicoalien.get(key)[2] and self.__posY > dicoalien.get(key)[1] and self.__posY < dicoalien.get(key)[1]+dicoalien.get(key)[3]:
+                canevas.delete(self.__pattern)
+                dicoalien.pop(key)
+                return
         if self.__posY <=0:
             return
         if True:
