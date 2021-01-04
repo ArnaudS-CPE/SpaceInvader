@@ -28,7 +28,7 @@
 # 
 # L'alien le plus à gauche ne suit pas bien le déplacement vers le bas
 # L'alien le plus a droite se décale de plus en plus vers la gauche, pas de façon normale
-# La collision est detectée, l'alien est visuellement supprimé mais le déplacement alien s'effectue toujours
+# Faire la condition de collision alien/ Vaisseau
 
 
 from tkinter import Label, Canvas, Button, Tk, Entry
@@ -51,8 +51,8 @@ class Alien:
         self.__posX = posX
         self.__posY = posY
         self.__pattern = canevas.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='green', fill='yellow')
-        dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height]
-        self.deplacementAlien()
+        dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height] # stocke dans un dictionnaire les positions en temps réel des aliens
+        self.deplacementAlien() # initie le déplacement de l'alien
 
     def get_posX(self):
         return self.__posX
@@ -74,29 +74,32 @@ class Alien:
     
     def deplacementAlien(self) :
         global DX
-        if self.__posX+self.__width > LargeurCanevas :
+        if self.__posX+self.__width > LargeurCanevas : # touche le bord droit du canvas
             self.__posX = LargeurCanevas-self.__width
             for key, value in dicoalien.items():
-                key.set_posY(self.__posY+DY)
-            DX = -DX        
-        if self.__posX < 3:
+                key.set_posY(self.__posY+DY) # déplacement vertical
+            DX = -DX # changement de sens de déplacement  
+        if self.__posX < 3: # touche le bord gauche du canvas
             self.__posX = 0
             for key, value in dicoalien.items():
                 key.set_posY(self.__posY+DY)
-            DX = -DX
-        if self.__posY > HauteurCanevas - 100:
+            DX = -DX # changement de sens de déplacement
+        if self.__posY > HauteurCanevas - 100: # condition de fin de partie perdante à revoir avec la collision vaisseau
             canevas.delete(self.__pattern)
             canevas.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
-        if self not in dicoalien:
+        if self not in dicoalien: # vérifie la présence de l'alien dans le dictionnaire / si il est touché, pour le supprimer du canevas
             canevas.delete(self.__pattern)
-            if dicoalien == {} :
+            if dicoalien == {} : # condition de sortie gagnante du jeu 
                 canevas.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Partie gagnée")
             return
-        self.__posX += DX
-        print(dicoalien)
-        canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
-        mw.after(20,self.deplacementAlien)
-        dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoalien
+
+        #if # condition touche alien / vaisseau
+
+        self.__posX += DX # déplacement horizontal
+        canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height) # déplacement de l'alien
+        mw.after(20,self.deplacementAlien) # déplacement en continu
+        dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoalien, pourquoi ça n'en recrée pas un ?
+
 
 class Vaisseau:
     global LargeurCanevas, HauteurCanevas
@@ -109,28 +112,28 @@ class Vaisseau:
         self.__pattern = canevas.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, 
             width=2, outline='red', fill='white')
     
-    def evenement(self, event):
+    def evenement(self, event): # gestion des évènements claviers pour le déplacement et le tir du vaisseau
         touche = event.keysym
-        print(touche)
-        if touche == 'Right':
-            if self.__posX+self.__width >= LargeurCanevas:
+        print(touche) # affiche la touche du clavier, facultatif
+        if touche == 'Right': # déplacement à droite
+            if self.__posX+self.__width >= LargeurCanevas: # condition d'arret
                 pass
             else:
                 self.__posX += 6
                 canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
         
-        if touche == 'Left':
-            if self.__posX <= 4:
+        if touche == 'Left': # déplacement à gauche
+            if self.__posX <= 4: # condition d'arret
                 pass
             else:
                 self.__posX -= 6
                 canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
         
-        if touche == "space":
+        if touche == "space": # déclenche le tir du vaisseau
             posXTir = self.__posX + (self.__width//2)
             posYTir = self.__posY
-            tir = Tir(posXTir, posYTir)
-            del tir
+            tir = Tir(posXTir, posYTir) # instancie un objet de type Tir
+            del tir # supprime le tir
         
 
 class Tir:
@@ -139,7 +142,7 @@ class Tir:
         self.__posX = posXTir
         self.__posY = posYTir
         self.__pattern = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
-        self.movementTir()
+        self.movementTir() # Initie le déplacement du tir
 
     def movementTir(self):
         # gère la collision du tir et d'un alien
@@ -148,14 +151,14 @@ class Tir:
                 canevas.delete(self.__pattern)
                 dicoalien.pop(key)
                 return
-        if self.__posY <=0:
+        if self.__posY <=0: # collision avec le haut du canvas
             return
-        if True:
+        if True: # bouce infinie de déplacement
             self.__posY -= 6
             canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
             mw.after(20,self.movementTir)
 
-class Mur:
+class Mur: # protections pour le vaisseau
 
     def __init__(self, height, width):
         self.__height = height
