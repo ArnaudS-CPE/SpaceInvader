@@ -58,6 +58,7 @@ def jeu():
 
     mw.mainloop()
 
+
     
 def checkWinning(vaisseau,window):
     print(vaisseau.get_winning())

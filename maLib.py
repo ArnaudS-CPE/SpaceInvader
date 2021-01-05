@@ -235,8 +235,13 @@ class Tir:
 
 class Mur: # protections pour le vaisseau
 
-    def __init__(self, height, width):
+    def __init__(self, height, width, posX, posY, canevas):
         self.__height = height
         self.__width = width
+        self.__posX = posX
+        self.__posY = posY
+        self.__canv = canevas
+        self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='black', fill='grey25')
+
 
 
