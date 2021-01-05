@@ -221,20 +221,3 @@ class Mur: # protections pour le vaisseau
         self.__width = width
 
 
-# Script principal à déplacer dans le fichier Main et ajuster les appels
-# création de la fenetre
-mw = Tk()
-mw.geometry(str(LargeurCanevas+20) + "x" + str(HauteurCanevas+20))
-mw.title("Space Invader")
-mw.minsize(HauteurCanevas,LargeurCanevas)
-
-# création des widgets
-quit = Button(mw, text = "Quitter", command = mw.destroy)
-quit.pack(padx = 5, pady = 5)
-canevas = Canvas(mw, width = LargeurCanevas-20, height = HauteurCanevas-20, bg = "grey")
-canevas.pack(padx = 5, pady = 5)
-
-
-
-mw.mainloop()
-
