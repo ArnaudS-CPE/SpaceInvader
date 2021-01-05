@@ -180,7 +180,7 @@ class Tir:
         self.__posX = posXTir
         self.__posY = posYTir
         self.__direction = direction
-        self.__emetteur = vaisseau
+        self.__cible = vaisseau
         self.__canv = canevas
         self.__window = mw
         if direction == 0 :
@@ -206,17 +206,24 @@ class Tir:
                 self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
                 self.__window.after(20,self.movementTir)
         else:
-            if self.__posX >= self.__emetteur.get_posX() and self.__posX <= self.__emetteur.get_posX()+self.__emetteur.get_width() and self.__posY >= self.__emetteur.get_posY() and self.__posY <= self.__emetteur.get_posY()+self.__emetteur.get_height():
-                self.__canv.delete(self.__pattern)
-                self.__canv.delete(self.__emetteur.get_pattern())
-                boiteMessage = messagebox.askyesno("Perdu", "Vous avez perdu !\n Voulez vous recommencer ?")
-                if boiteMessage == "yes":
-                    #commande pour recommencer
+            if self.__posX >= self.__cible.get_posX() and self.__posX <= self.__cible.get_posX()+self.__cible.get_width() and self.__posY >= self.__cible.get_posY() and self.__posY <= self.__cible.get_posY()+self.__cible.get_height():
+                if self.__cible.get_vies() != 1:
+                    self.__canv.delete(self.__pattern)
+                    print("-1")
+                    self.__cible.set_vies(self.__cible.get_vies()-1)
+                    return
                 else:
-                    
+                    print("éliminé")
+                    self.__canv.delete(self.__pattern)
+                    self.__canv.delete(self.__cible.get_pattern())
+                    # boiteMessage = messagebox.askyesno("Perdu", "Vous avez perdu !\n Voulez vous recommencer ?")
+                    # if boiteMessage == "yes":
+                    #     #commande pour recommencer
+                    # else:
+                    #     # commande pour quitter le programme
             if self.__posY >= HauteurCanevas:
                 return
-            if True:
+            elif True:
                 self.__posY += 6
                 self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY+6)
                 self.__window.after(20,self.movementTir)
