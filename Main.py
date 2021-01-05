@@ -43,18 +43,18 @@ canevas.pack(padx = 5, pady = 5)
 
 
 
-vaisseau = mL.Vaisseau(10,600)
-mL.canevas.focus_set()
-mL.canevas.bind('<Key>',vaisseau.evenement)
+vaisseau = mL.Vaisseau(10,600, canevas, mw)
+canevas.focus_set()
+canevas.bind('<Key>',vaisseau.evenement)
 
-alien1 = mL.Alien(10, 10, 50, 50)
-alien2 = mL.Alien(110, 10, 50, 50)
-alien3 = mL.Alien(210, 10, 50, 50)
-alien4 = mL.Alien(310, 10, 50, 50)
-alien5 = mL.Alien(410, 10, 50, 50)
-alien6 = mL.Alien(510, 10, 50, 50)
-alien7 = mL.Alien(610, 10, 50, 50)
+alien1 = mL.Alien(10, 10, 50, 50, canevas, mw)
+alien2 = mL.Alien(110, 10, 50, 50, canevas, mw)
+alien3 = mL.Alien(210, 10, 50, 50, canevas, mw)
+alien4 = mL.Alien(310, 10, 50, 50, canevas, mw)
+alien5 = mL.Alien(410, 10, 50, 50, canevas, mw)
+alien6 = mL.Alien(510, 10, 50, 50, canevas, mw)
+alien7 = mL.Alien(610, 10, 50, 50, canevas, mw)
 
-mL.mw.mainloop()
+mw.mainloop()
 
 
