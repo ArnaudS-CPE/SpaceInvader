@@ -33,7 +33,7 @@
 # problème déplacement alien collision à droite
 
 
-from tkinter import Label, Canvas, Button, Tk, Entry
+from tkinter import Label, Canvas, Button, Tk, messagebox
 import random
 
 LargeurCanevas = 900
@@ -206,11 +206,14 @@ class Tir:
                 self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
                 self.__window.after(20,self.movementTir)
         else:
-            print(self.__emetteur.get_posX())
             if self.__posX >= self.__emetteur.get_posX() and self.__posX <= self.__emetteur.get_posX()+self.__emetteur.get_width() and self.__posY >= self.__emetteur.get_posY() and self.__posY <= self.__emetteur.get_posY()+self.__emetteur.get_height():
-                print("coucou")
                 self.__canv.delete(self.__pattern)
                 self.__canv.delete(self.__emetteur.get_pattern())
+                boiteMessage = messagebox.askyesno("Perdu", "Vous avez perdu !\n Voulez vous recommencer ?")
+                if boiteMessage == "yes":
+                    #commande pour recommencer
+                else:
+                    
             if self.__posY >= HauteurCanevas:
                 return
             if True:
