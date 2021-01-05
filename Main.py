@@ -22,7 +22,7 @@
 # • Mettre des cheat codes afin de gagner des vies supplémentaires
 # • Laisser parler votre imagination et n’hésitez pas à demander conseil à vos ainés qui auraient perdu un temps précieux à jouer à ce jeu ! 
 
-from tkinter import *
+from tkinter import Tk
 import maLib as mL
 
 
