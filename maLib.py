@@ -43,6 +43,7 @@ DX=4
 DY=20
 
 dicoalien = {} # contient les objets aliens et leurs informations 
+dicomur = [] # liste qui contient les coordonnées des murs
 
 
 class Alien:
@@ -213,6 +214,8 @@ class Tir:
                     return
             if self.__posY <=0: # collision avec le haut du canvas
                 return
+            if (self.__posY <= 530) and ((self.__posX<dicomur[0][0]+70 and self.__posX>dicomur[0][0]) or (self.__posX<dicomur[1][0]+70 and self.__posX>dicomur[1][0])) : #sous le bas des murs (valeur a changer eventuellement)
+                self.__canv.delete(self.__pattern)
             if True: # bouce infinie de déplacement
                 self.__posY -= 6
                 self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
@@ -233,6 +236,8 @@ class Tir:
                     
             if self.__posY >= HauteurCanevas:
                 return
+            if (self.__posY >= 500) and ((self.__posX<dicomur[0][0]+70 and self.__posX>dicomur[0][0]) or (self.__posX<dicomur[1][0]+70 and self.__posX>dicomur[1][0])) : #sous le bas des murs (valeur a changer eventuellement)
+                self.__canv.delete(self.__pattern)
             elif True:
                 self.__posY += 6
                 self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY+6)
@@ -240,13 +245,15 @@ class Tir:
 
 class Mur: # protections pour le vaisseau
 
-    def __init__(self, height, width, posX, posY, canevas):
+    def __init__(self, height, width, posX, posY, canevas, mw):
         self.__height = height
         self.__width = width
         self.__posX = posX
         self.__posY = posY
         self.__canv = canevas
+        self.__window = mw
         self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='black', fill='grey25')
-
+        dicomur.append([self.__posX, self.__width])
+        print(dicomur)
 
 
