@@ -66,12 +66,6 @@ class Alien:
     
     def get_posY(self):
         return self.__posY
-    
-    def set_posY(self, newPosY):
-        self.__posY = newPosY
-    
-    def set_posX(self, newPosX):
-        self.__posX = newPosX
 
     def get_height(self):
         return self.__height
