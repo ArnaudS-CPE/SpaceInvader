@@ -117,13 +117,14 @@ class Alien:
 class Vaisseau:
     global LargeurCanevas, HauteurCanevas
 
-    def __init__(self, posX, posY, canevas):
+    def __init__(self, posX, posY, canevas, mw):
         self.__posX = posX
         self.__posY = posY
         self.__height = 50
         self.__width = 100
         self.__vies = 3
         self.__canv = canevas
+        self.__window = mw
         self.__pattern = self.__canv.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, 
             width=2, outline='red', fill='white')
     
@@ -168,7 +169,7 @@ class Vaisseau:
         if touche == "space": # déclenche le tir du vaisseau
             posXTir = self.__posX + (self.__width//2)
             posYTir = self.__posY
-            tir = Tir(posXTir, posYTir, 0, self) # instancie un objet de type Tir
+            tir = Tir(posXTir, posYTir, 0, self, self.__canv, self.__window) # instancie un objet de type Tir
             del tir # supprime le tir
         
 
