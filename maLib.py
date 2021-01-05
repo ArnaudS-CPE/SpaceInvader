@@ -84,7 +84,7 @@ class Alien:
             DX = -DX # changement de sens de déplacement  
         if self.__posX < 3: # touche le bord gauche du canvas
             self.__posX = 0
-            for key, value in dicoalien.items():
+            for key in dicoalien.keys():
                 key.set_posY(self.__posY+DY)
             DX = -DX # changement de sens de déplacement
         if self.__posY > HauteurCanevas - 100: # condition de fin de partie perdante à revoir avec la collision vaisseau
