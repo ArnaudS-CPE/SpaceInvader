@@ -55,6 +55,8 @@ alien5 = mL.Alien(410, 10, 50, 50, canevas, mw)
 alien6 = mL.Alien(510, 10, 50, 50, canevas, mw)
 alien7 = mL.Alien(610, 10, 50, 50, canevas, mw)
 
+alien1.createurTir()
+
 mw.mainloop()
 
 
