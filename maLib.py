@@ -109,7 +109,7 @@ class Alien:
         alienTireur = random.choice(list(dicoalien.keys()))
         posXTir = alienTireur.__posX + (alienTireur.__width//2)
         posYTir =   alienTireur.__posY
-        tir = Tir(posXTir, posYTir, 1, self) # instancie un objet de type Tir
+        tir = Tir(posXTir, posYTir, 1, self, self.__canv, self.__window) # instancie un objet de type Tir
         del tir # supprime le tir
         self.__canv.after(3000, self.createurTir)
 
