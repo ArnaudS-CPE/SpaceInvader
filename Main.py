@@ -57,6 +57,8 @@ alien7 = mL.Alien(610, 10, 50, 50, vaisseau, canevas, mw)
 
 alien1.createurTir()
 
+mur1 = mL.Mur(30, 70, 50, 500, canevas)
+
 mw.mainloop()
 
 
