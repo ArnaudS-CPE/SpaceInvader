@@ -114,7 +114,7 @@ class Alien:
                 tir = Tir(posXTir, posYTir, 1) # instancie un objet de type Tir
                 del tir # supprime le tir
             compteur += 1
-        mw.after(3000, self.)
+        mw.after(3000, self.createurTir)
 
 
 class Vaisseau:
