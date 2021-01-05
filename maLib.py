@@ -83,16 +83,17 @@ class Alien:
     
     def deplacementAlien(self) :
         global DX
-        correction = False 
+
         if self.__posX+self.__width+DX > LargeurCanevas : # touche le bord droit du canvas
-            correction = True
             for key in dicoalien.keys():
-                key.set_posY(self.__posY+DY) # déplacement vertical
+                key.__posY += DY # déplacement vertical
+                if key != self:
+                    key.__posX -= DX
+            self.__posX += DX
             DX = -DX # changement de sens de déplacement  
         if self.__posX+DX < 3: # touche le bord gauche du canvas
-            self.__posY+DY
             for key in dicoalien.keys():
-                key.set_posY(self.__posY+DY)
+                key.__posY += DY
             DX = -DX # changement de sens de déplacement
         if self.__posY > HauteurCanevas - 100: # condition de fin de partie perdante à revoir avec la collision vaisseau
             self.__canv.delete(self.__pattern)
@@ -104,8 +105,8 @@ class Alien:
             return
 
         #if # condition touche alien / vaisseau
-        if not correction:
-            self.__posX += DX # déplacement horizontal
+
+        self.__posX += DX # déplacement horizontal
         self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height) # déplacement de l'alien
         self.__window.after(20, self.deplacementAlien) # déplacement en continu
         dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoalien, pourquoi ça n'en recrée pas un ?
