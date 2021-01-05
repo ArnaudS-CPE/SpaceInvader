@@ -123,9 +123,10 @@ class Vaisseau:
         self.__posY = posY
         self.__height = 50
         self.__width = 100
-        self.__vies = 3
+        self.__vies = 1
         self.__canv = canevas
         self.__window = mw
+        self.__winning = True
         self.__pattern = self.__canv.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, 
             width=2, outline='red', fill='white')
     
@@ -150,9 +151,15 @@ class Vaisseau:
     def get_pattern(self):
         return self.__pattern
 
+    def get_winning(self):
+        return self.__winning
+    
+    def set_winning(self):
+        self.__winning = False
+
     def evenement(self, event): # gestion des évènements claviers pour le déplacement et le tir du vaisseau
         touche = event.keysym
-        print(touche) # affiche la touche du clavier, facultatif
+        # print(touche) # affiche la touche du clavier, facultatif
         if touche == 'Right': # déplacement à droite
             if self.__posX+self.__width >= LargeurCanevas: # condition d'arret
                 pass
@@ -216,11 +223,9 @@ class Tir:
                     print("éliminé")
                     self.__canv.delete(self.__pattern)
                     self.__canv.delete(self.__cible.get_pattern())
-                    # boiteMessage = messagebox.askyesno("Perdu", "Vous avez perdu !\n Voulez vous recommencer ?")
-                    # if boiteMessage == "yes":
-                    #     #commande pour recommencer
-                    # else:
-                    #     # commande pour quitter le programme
+                    self.__cible.set_winning()
+                    # del le vaisseau
+                    
             if self.__posY >= HauteurCanevas:
                 return
             elif True:
