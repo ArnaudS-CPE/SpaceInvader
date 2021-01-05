@@ -70,6 +70,9 @@ class Alien:
     def set_posY(self, newPosY):
         self.__posY = newPosY
     
+    def set_posX(self, newPosX):
+        self.__posX = newPosX
+
     def get_height(self):
         return self.__height
 
@@ -81,13 +84,14 @@ class Alien:
     
     def deplacementAlien(self) :
         global DX
-        if self.__posX+self.__width > LargeurCanevas : # touche le bord droit du canvas
-            self.__posX = LargeurCanevas-self.__width
+        correction = False 
+        if self.__posX+self.__width+DX > LargeurCanevas : # touche le bord droit du canvas
+            correction = True
             for key in dicoalien.keys():
                 key.set_posY(self.__posY+DY) # déplacement vertical
             DX = -DX # changement de sens de déplacement  
-        if self.__posX < 3: # touche le bord gauche du canvas
-            self.__posX = 0
+        if self.__posX+DX < 3: # touche le bord gauche du canvas
+            self.__posY+DY
             for key in dicoalien.keys():
                 key.set_posY(self.__posY+DY)
             DX = -DX # changement de sens de déplacement
@@ -101,8 +105,8 @@ class Alien:
             return
 
         #if # condition touche alien / vaisseau
-
-        self.__posX += DX # déplacement horizontal
+        if not correction:
+            self.__posX += DX # déplacement horizontal
         self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height) # déplacement de l'alien
         self.__window.after(20, self.deplacementAlien) # déplacement en continu
         dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoalien, pourquoi ça n'en recrée pas un ?
