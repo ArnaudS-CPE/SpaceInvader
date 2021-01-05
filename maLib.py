@@ -135,19 +135,26 @@ class Vaisseau:
         if touche == "space": # déclenche le tir du vaisseau
             posXTir = self.__posX + (self.__width//2)
             posYTir = self.__posY
-            tir = Tir(posXTir, posYTir) # instancie un objet de type Tir
+            tir = Tir(posXTir, posYTir, 0) # instancie un objet de type Tir
             del tir # supprime le tir
         
 
 class Tir:
     global dicoalien
-    def __init__(self, posXTir, posYTir):
+    def __init__(self, posXTir, posYTir, direction):
         self.__posX = posXTir
         self.__posY = posYTir
-        self.__pattern = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
-        self.movementTir() # Initie le déplacement du tir
+        self.__direction = direction
+        if direction == 0 :
+            self.__pattern = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
+            self.movementTirVaisseau() # Initie le déplacement du tir allié
+        else:
+            self.__pattern = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir+6, fill = "black")
+            self.movementTirAlien() # Initie le déplacement du tir alien
+            
+        
 
-    def movementTir(self):
+    def movementTirVaisseau(self):
         # gère la collision du tir et d'un alien
         for key, value in dicoalien.items():
             if self.__posX > dicoalien.get(key)[0] and self.__posX < dicoalien.get(key)[0]+dicoalien.get(key)[2] and self.__posY > dicoalien.get(key)[1] and self.__posY < dicoalien.get(key)[1]+dicoalien.get(key)[3]:
@@ -159,7 +166,10 @@ class Tir:
         if True: # bouce infinie de déplacement
             self.__posY -= 6
             canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
-            mw.after(20,self.movementTir)
+            mw.after(20,self.movementTirVaisseau)
+    
+    def movementTirAlien(self):
+        k
 
 
 class Mur: # protections pour le vaisseau
