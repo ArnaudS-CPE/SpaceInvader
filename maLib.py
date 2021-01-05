@@ -48,13 +48,14 @@ dicoalien = {} # contient les objets aliens et leurs informations
 class Alien:
     global LargeurCanevas, HauteurCanevas, dicoalien
 
-    def __init__(self, posX, posY, height, width, canevas, mw):
+    def __init__(self, posX, posY, height, width, vaisseau, canevas, mw):
         self.__height = height
         self.__width = width
         self.__posX = posX
         self.__posY = posY
         self.__canv = canevas
         self.__window = mw
+        self.__ennemi = vaisseau
         self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='green', fill='yellow')
         dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height] # stocke dans un dictionnaire les positions en temps réel des aliens
         self.deplacementAlien() # initie le déplacement de l'alien
@@ -109,7 +110,7 @@ class Alien:
         alienTireur = random.choice(list(dicoalien.keys()))
         posXTir = alienTireur.__posX + (alienTireur.__width//2)
         posYTir =   alienTireur.__posY + alienTireur.__height
-        tir = Tir(posXTir, posYTir, 1, self, self.__canv, self.__window) # instancie un objet de type Tir
+        tir = Tir(posXTir, posYTir, 1, self.__ennemi, self.__canv, self.__window) # instancie un objet de type Tir
         del tir # supprime le tir
         self.__canv.after(3000, self.createurTir)
 
@@ -205,7 +206,9 @@ class Tir:
                 self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
                 self.__window.after(20,self.movementTir)
         else:
-            if self.__posX > self.__emetteur.get_posX() and self.__posX < self.__emetteur.get_posX()+self.__emetteur.get_width() and self.__posY > self.__emetteur.get_posY() and self.__posY < self.__emetteur.get_posY()+self.__emetteur.get_height():
+            print(self.__emetteur.get_posX())
+            if self.__posX >= self.__emetteur.get_posX() and self.__posX <= self.__emetteur.get_posX()+self.__emetteur.get_width() and self.__posY >= self.__emetteur.get_posY() and self.__posY <= self.__emetteur.get_posY()+self.__emetteur.get_height():
+                print("coucou")
                 self.__canv.delete(self.__pattern)
                 self.__canv.delete(self.__emetteur.get_pattern())
             if self.__posY >= HauteurCanevas:
