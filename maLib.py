@@ -48,12 +48,14 @@ dicoalien = {} # contient les objets aliens et leurs informations
 class Alien:
     global LargeurCanevas, HauteurCanevas, dicoalien
 
-    def __init__(self, posX, posY, height, width):
+    def __init__(self, posX, posY, height, width, canevas, mw):
         self.__height = height
         self.__width = width
         self.__posX = posX
         self.__posY = posY
-        self.__pattern = canevas.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='green', fill='yellow')
+        self.__canv = canevas
+        self.__window = mw
+        self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='green', fill='yellow')
         dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height] # stocke dans un dictionnaire les positions en temps réel des aliens
         self.deplacementAlien() # initie le déplacement de l'alien
         self.createurTir() # fait tirer les aliens
@@ -89,19 +91,19 @@ class Alien:
                 key.set_posY(self.__posY+DY)
             DX = -DX # changement de sens de déplacement
         if self.__posY > HauteurCanevas - 100: # condition de fin de partie perdante à revoir avec la collision vaisseau
-            canevas.delete(self.__pattern)
-            canevas.create_text(LargeurCanevas//2, HauteurCanevas//2, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
+            self.__canv.delete(self.__pattern)
+            self.__canv.create_text(LargeurCanevas//2, HauteurCanevas//2, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
         if self not in dicoalien: # vérifie la présence de l'alien dans le dictionnaire / si il est touché, pour le supprimer du canevas
-            canevas.delete(self.__pattern)
+            self.__canv.delete(self.__pattern)
             if dicoalien == {} : # condition de sortie gagnante du jeu 
-                canevas.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Partie gagnée")
+                self.__canv.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Partie gagnée")
             return
 
         #if # condition touche alien / vaisseau
 
         self.__posX += DX # déplacement horizontal
-        canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height) # déplacement de l'alien
-        mw.after(20, self.deplacementAlien) # déplacement en continu
+        self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height) # déplacement de l'alien
+        self.__window.after(20, self.deplacementAlien) # déplacement en continu
         dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoalien, pourquoi ça n'en recrée pas un ?
 
     def createurTir(self):
@@ -114,19 +116,20 @@ class Alien:
                 tir = Tir(posXTir, posYTir, 1, self) # instancie un objet de type Tir
                 del tir # supprime le tir
             compteur += 1
-        mw.after(3000, self.createurTir)
+        self.__window.after(3000, self.createurTir)
 
 
 class Vaisseau:
     global LargeurCanevas, HauteurCanevas
 
-    def __init__(self, posX, posY):
+    def __init__(self, posX, posY, canevas):
         self.__posX = posX
         self.__posY = posY
         self.__height = 50
         self.__width = 100
         self.__vies = 3
-        self.__pattern = canevas.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, 
+        self.__canv = canevas
+        self.__pattern = self.__canv.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, 
             width=2, outline='red', fill='white')
     
     def get_posX(self):
@@ -158,14 +161,14 @@ class Vaisseau:
                 pass
             else:
                 self.__posX += 6
-                canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
+                self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
         
         if touche == 'Left': # déplacement à gauche
             if self.__posX <= 4: # condition d'arret
                 pass
             else:
                 self.__posX -= 6
-                canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
+                self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
         
         if touche == "space": # déclenche le tir du vaisseau
             posXTir = self.__posX + (self.__width//2)
@@ -176,15 +179,17 @@ class Vaisseau:
 
 class Tir:
     global dicoalien
-    def __init__(self, posXTir, posYTir, direction, vaisseau):
+    def __init__(self, posXTir, posYTir, direction, vaisseau, canevas, mw):
         self.__posX = posXTir
         self.__posY = posYTir
         self.__direction = direction
         self.__emetteur = vaisseau
+        self.__canv = canevas
+        self.__window = mw
         if direction == 0 :
-            self.__pattern = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
+            self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
         else:
-            self.__pattern = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir+6, fill = "black")
+            self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir+6, fill = "black")
         self.movementTir() # Initie le déplacement du tir
             
         
@@ -194,25 +199,25 @@ class Tir:
             # gère la collision du tir et d'un alien
             for key, value in dicoalien.items():
                 if self.__posX > dicoalien.get(key)[0] and self.__posX < dicoalien.get(key)[0]+dicoalien.get(key)[2] and self.__posY > dicoalien.get(key)[1] and self.__posY < dicoalien.get(key)[1]+dicoalien.get(key)[3]:
-                    canevas.delete(self.__pattern)
+                    self.__canv.delete(self.__pattern)
                     dicoalien.pop(key)
                     return
             if self.__posY <=0: # collision avec le haut du canvas
                 return
             if True: # bouce infinie de déplacement
                 self.__posY -= 6
-                canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
-                mw.after(20,self.movementTir)
+                self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
+                self.__window.after(20,self.movementTir)
         else:
             if self.__posX > self.__emetteur.get_posX() and self.__posX < self.__emetteur.get_posX()+self.__emetteur.get_width() and self.__posY > self.__emetteur.get_posY() and self.__posY < self.__emetteur.get_posY()+self.__emetteur.get_height():
-                canevas.delete(self.__pattern)
-                canevas.delete(self.__emetteur.get_pattern())
+                self.__canv.delete(self.__pattern)
+                self.__canv.delete(self.__emetteur.get_pattern())
             if self.__posY >= HauteurCanevas:
                 return
             if True:
                 self.__posY += 6
-                canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY+6)
-                mw.after(20,self.movementTir)
+                self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY+6)
+                self.__window.after(20,self.movementTir)
 
 class Mur: # protections pour le vaisseau
 
