@@ -105,13 +105,13 @@ class Alien:
         dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoalien, pourquoi ça n'en recrée pas un ?
 
     def createurTir(self):
-        random = randint(0,len(dicoalien)-1)
+        randAlien = randint(0,len(dicoalien)-1)
         compteur = 0
         for key, value in dicoalien.items():
-            if compteur == random:
+            if compteur == randAlien:
                 posXTir = key.__posX + (key.__width//2)
                 posYTir = key.__posY
-                tir = Tir(posXTir, posYTir, 1) # instancie un objet de type Tir
+                tir = Tir(posXTir, posYTir, 1, self) # instancie un objet de type Tir
                 del tir # supprime le tir
             compteur += 1
         mw.after(3000, self.createurTir)
@@ -170,16 +170,17 @@ class Vaisseau:
         if touche == "space": # déclenche le tir du vaisseau
             posXTir = self.__posX + (self.__width//2)
             posYTir = self.__posY
-            tir = Tir(posXTir, posYTir, 0) # instancie un objet de type Tir
+            tir = Tir(posXTir, posYTir, 0, self) # instancie un objet de type Tir
             del tir # supprime le tir
         
 
 class Tir:
     global dicoalien
-    def __init__(self, posXTir, posYTir, direction):
+    def __init__(self, posXTir, posYTir, direction, vaisseau):
         self.__posX = posXTir
         self.__posY = posYTir
         self.__direction = direction
+        self.__emetteur = vaisseau
         if direction == 0 :
             self.__pattern = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
         else:
@@ -203,9 +204,9 @@ class Tir:
                 canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
                 mw.after(20,self.movementTir)
         else:
-            if self.__posX > vaisseau.get_posX() and self.__posX < vaisseau.get_posX()+vaisseau.get_width() and self.__posY > vaisseau.get_posY() and self.__posY < vaisseau.get_posY()+vaisseau.get_height():
+            if self.__posX > self.__emetteur.get_posX() and self.__posX < self.__emetteur.get_posX()+self.__emetteur.get_width() and self.__posY > self.__emetteur.get_posY() and self.__posY < self.__emetteur.get_posY()+self.__emetteur.get_height():
                 canevas.delete(self.__pattern)
-                canevas.delete(vaisseau.get_pattern())
+                canevas.delete(self.__emetteur.get_pattern())
             if self.__posY >= HauteurCanevas:
                 return
             if True:
