@@ -111,7 +111,7 @@ class Alien:
         posYTir =   alienTireur.__posY
         tir = Tir(posXTir, posYTir, 1, self, self.__canv, self.__window) # instancie un objet de type Tir
         del tir # supprime le tir
-        mw.after(3000, self.createurTir)
+        self.__canv.after(3000, self.createurTir)
 
 
 class Vaisseau:
