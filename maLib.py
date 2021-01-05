@@ -88,7 +88,7 @@ class Alien:
             DX = -DX # changement de sens de déplacement
         if self.__posY > HauteurCanevas - 100: # condition de fin de partie perdante à revoir avec la collision vaisseau
             canevas.delete(self.__pattern)
-            canevas.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
+            canevas.create_text(LargeurCanevas//2, HauteurCanevas//2, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
         if self not in dicoalien: # vérifie la présence de l'alien dans le dictionnaire / si il est touché, pour le supprimer du canevas
             canevas.delete(self.__pattern)
             if dicoalien == {} : # condition de sortie gagnante du jeu 
@@ -111,7 +111,7 @@ class Vaisseau:
         self.__posY = posY
         self.__height = 50
         self.__width = 100
-        self.__vie = 3
+        self.__vies = 3
         self.__pattern = canevas.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, 
             width=2, outline='red', fill='white')
     
@@ -126,6 +126,12 @@ class Vaisseau:
 
     def get_width(self):
         return self.__width
+    
+    def get_vies(self):
+        return self.__vies
+
+    def set_vies(self, newVies):
+        self.__vies = newVies
 
     def evenement(self, event): # gestion des évènements claviers pour le déplacement et le tir du vaisseau
         touche = event.keysym
@@ -180,9 +186,9 @@ class Tir:
             canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
             mw.after(20,self.movementTirVaisseau)
     
-    def movementTirAlien(self): # gère le mouvement des tirs aliens
-        if self.__posX > """posX du vaisseau""" and self.__posX < """posX du vaisseau + largeur""" and self.__posY > """posY du vaisseau""" and self.__posY < """posY du vaisseau + hauteur""":
-
+    # def movementTirAlien(self): # gère le mouvement des tirs aliens
+    #     if self.__posX > vaisseau.get_posX() and self.__posX < vaisseau.get_posX()+vaisseau.get_width() and self.__posY > vaisseau.get_posY() and self.__posY < vaisseau.get_posY()+vaisseau.get_height():
+    #         vaisseau.
 
 class Mur: # protections pour le vaisseau
 
