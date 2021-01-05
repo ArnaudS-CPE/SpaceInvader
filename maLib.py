@@ -234,18 +234,6 @@ canevas = Canvas(mw, width = LargeurCanevas-20, height = HauteurCanevas-20, bg =
 canevas.pack(padx = 5, pady = 5)
 
 
-vaisseau = Vaisseau(10,600)
-canevas.focus_set()
-canevas.bind('<Key>',vaisseau.evenement)
-
-alien1 = Alien(10, 10, 50, 50)
-alien2 = Alien(110, 10, 50, 50)
-alien3 = Alien(210, 10, 50, 50)
-alien4 = Alien(310, 10, 50, 50)
-alien5 = Alien(410, 10, 50, 50)
-alien6 = Alien(510, 10, 50, 50)
-alien7 = Alien(610, 10, 50, 50)
-
 
 mw.mainloop()
 

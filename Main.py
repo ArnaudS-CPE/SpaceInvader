@@ -23,133 +23,19 @@
 # • Laisser parler votre imagination et n’hésitez pas à demander conseil à vos ainés qui auraient perdu un temps précieux à jouer à ce jeu ! 
 
 from tkinter import *
+import maLib as mL
 
 
-LargeurCanevas = 480
-HauteurCanevas = 320
-X = 50
-Y = 50
-x = 240
-y = 300
+vaisseau = mL.Vaisseau(10,600)
+mL.canevas.focus_set()
+mL.canevas.bind('<Key>',vaisseau.evenement)
 
-DX = 4
-DY = 3
+alien1 = mL.Alien(10, 10, 50, 50)
+alien2 = mL.Alien(110, 10, 50, 50)
+alien3 = mL.Alien(210, 10, 50, 50)
+alien4 = mL.Alien(310, 10, 50, 50)
+alien5 = mL.Alien(410, 10, 50, 50)
+alien6 = mL.Alien(510, 10, 50, 50)
+alien7 = mL.Alien(610, 10, 50, 50)
 
-dicoalien = {} # contient les objets aliens et leurs informations 
-dicotir = {} # contient les objets tirs et leurs informations
-
-
-class Alien :
-    global LargeurCanevas, HauteurCanevas, dicoalien
-
-    def __init__(self, posX, posY, height, width) :
-        self.__height = height
-        self.__width = width
-        self.__posX = posX
-        self.__posY = posY
-        self.__pattern = canevas.create_oval(posX, posY, posX+width, posY+height, width=3, outline='green', fill='yellow')
-    
-    def get_posX(self):
-        return self.__posX
-    
-    def get_posY(self):
-        return self.__posY
-    
-    def get_height(self):
-        return self.__height
-
-    def get_width(self):
-        return self.__width   
-
-    def deplacementAlien(self): 
-        global DX
-        if self.__posX+self.__width > LargeurCanevas :
-            self.__posX = LargeurCanevas-self.__width
-            self.__posY += DY 
-            DX = -DX        
-        if self.__posX < 3 :
-            self.__posX = 0
-            self.__posY += DY
-            DX = -DX
-        if self.__posY > 250 :
-            canevas.delete(self.__pattern)
-            canevas.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
-        self.__posX += DX
-        canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
-        mw.after(20,self.deplacementAlien)
-        dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height]
-
-class Vaisseau:
-    global LargeurCanevas, HauteurCanevas
-
-    def __init__(self, posX, posY):
-        self.__posX = posX
-        self.__posY = posY
-        self.__height = 30
-        self.__width = 20
-        self.__pattern = canevas.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, 
-            width=2, outline='red', fill='white')
-    
-    def evenement(self, event):
-        touche = event.keysym
-        print(touche)
-        if touche == 'Right':
-            if self.__posX+self.__width >= LargeurCanevas:
-                pass
-            else:
-                self.__posX += 6
-                canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
-        
-        if touche == 'Left':
-            if self.__posX <= 4:
-                pass
-            else:
-                self.__posX -= 6
-                canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
-        
-        if touche == "space":
-            posXTir = self.__posX + (self.__width//2)
-            posYTir = self.__posY
-            tir = Tir(posXTir, posYTir)
-            del tir
-
-class Tir:
-    global dicoalien
-    def __init__(self, posXTir, posYTir):
-        self.__posX = posXTir
-        self.__posY = posYTir
-        self.__pattern = canevas.create_rectangle(posXTir,posYTir,posXTir,posYTir-7, fill = "black")
-        self.movementTir()
-
-    def movementTir(self):
-        if self.__posX > dicoalien.get(alien1)[0] and self.__posX < dicoalien.get(alien1)[0]+dicoalien.get(alien1)[2] and self.__posY > dicoalien.get(alien1)[1] and self.__posY < dicoalien.get(alien1)[1]+dicoalien.get(alien1)[3]:
-            canevas.delete(self.__pattern)
-            canevas.delete(Alien)
-            return
-        if self.__posY <=0:
-            return
-        if True:
-            self.__posY -= 7
-            canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
-            mw.after(20,self.movementTir)
-        dicotir[self] = [self.__posX, self.__posY]
-
-
-# création de la fenêtre principale
-mw = Tk()
-#mw.geometry("1000x800")
-mw.title("Space Invaders")
-
-# création d'un widget canvas
-canevas = Canvas(mw, height=HauteurCanevas, width=LargeurCanevas, bg='navy')
-canevas.pack(padx=5, pady=5)
-
-
-vaisseau = Vaisseau(240,280)
-canevas.focus_set()
-canevas.bind('<Key>',vaisseau.evenement)
-
-alien1 = Alien(240, 30, 20, 40)
-alien1.deplacementAlien()
-
-mw.mainloop()
+mL.mw.mainloop()
