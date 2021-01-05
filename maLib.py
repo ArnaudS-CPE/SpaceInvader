@@ -191,7 +191,7 @@ class Mur: # protections pour le vaisseau
         self.__width = width
 
 
-
+# Script principal à déplacer dans le fichier Main et ajuster les appels
 # création de la fenetre
 mw = Tk()
 mw.geometry(str(LargeurCanevas+20) + "x" + str(HauteurCanevas+20))
