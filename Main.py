@@ -36,7 +36,7 @@ def jeu():
     # création des widgets
     quit = Button(mw, text = "Quitter", command = mw.destroy)
     quit.pack(padx = 5, pady = 5)
-    canevas = Canvas(mw, width = mL.LargeurCanevas-20, height = mL.HauteurCanevas-20, bg = "grey")
+    canevas = Canvas(mw, width = mL.LargeurCanevas, height = mL.HauteurCanevas, bg = "grey")
     canevas.pack(padx = 5, pady = 5)
 
 
@@ -63,7 +63,6 @@ def jeu():
 
     
 def checkWinning(vaisseau,window):
-    print(vaisseau.get_winning())
     if not vaisseau.get_winning():
         boiteMessage = messagebox.askyesno("Perdu", "Vous avez perdu !\n Voulez vous recommencer ?")
         if boiteMessage == 1:

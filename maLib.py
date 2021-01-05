@@ -89,8 +89,8 @@ class Alien:
             for key in dicoalien.keys():
                 key.set_posY(self.__posY+DY) # déplacement vertical
             DX = -DX # changement de sens de déplacement  
-        if self.__posX < 3: # touche le bord gauche du canvas
-            self.__posX = 0
+        if self.__posX+DX < 3: # touche le bord gauche du canvas
+            self.__posY+DY
             for key in dicoalien.keys():
                 key.set_posY(self.__posY+DY)
             DX = -DX # changement de sens de déplacement
