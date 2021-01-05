@@ -34,7 +34,7 @@
 
 
 from tkinter import Label, Canvas, Button, Tk, Entry
-from random import randint
+import random
 
 LargeurCanevas = 900
 HauteurCanevas = 700
@@ -58,7 +58,6 @@ class Alien:
         self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='green', fill='yellow')
         dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height] # stocke dans un dictionnaire les positions en temps réel des aliens
         self.deplacementAlien() # initie le déplacement de l'alien
-        self.createurTir() # fait tirer les aliens
 
     def get_posX(self):
         return self.__posX
@@ -82,12 +81,12 @@ class Alien:
         global DX
         if self.__posX+self.__width > LargeurCanevas : # touche le bord droit du canvas
             self.__posX = LargeurCanevas-self.__width
-            for key, value in dicoalien.items():
+            for key in dicoalien.keys():
                 key.set_posY(self.__posY+DY) # déplacement vertical
             DX = -DX # changement de sens de déplacement  
         if self.__posX < 3: # touche le bord gauche du canvas
             self.__posX = 0
-            for key, value in dicoalien.items():
+            for key in dicoalien.keys():
                 key.set_posY(self.__posY+DY)
             DX = -DX # changement de sens de déplacement
         if self.__posY > HauteurCanevas - 100: # condition de fin de partie perdante à revoir avec la collision vaisseau
@@ -107,16 +106,12 @@ class Alien:
         dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoalien, pourquoi ça n'en recrée pas un ?
 
     def createurTir(self):
-        randAlien = randint(0,len(dicoalien)-1)
-        compteur = 0
-        for key, value in dicoalien.items():
-            if compteur == randAlien:
-                posXTir = key.__posX + (key.__width//2)
-                posYTir = key.__posY
-                tir = Tir(posXTir, posYTir, 1, self) # instancie un objet de type Tir
-                del tir # supprime le tir
-            compteur += 1
-        self.__window.after(3000, self.createurTir)
+        alienTireur = random.choice(list(dicoalien.keys()))
+        posXTir = alienTireur.__posX + (alienTireur.__width//2)
+        posYTir =   alienTireur.__posY
+        tir = Tir(posXTir, posYTir, 1, self) # instancie un objet de type Tir
+        del tir # supprime le tir
+        mw.after(3000, self.createurTir)
 
 
 class Vaisseau:
@@ -197,7 +192,7 @@ class Tir:
     def movementTir(self):
         if self.__direction == 0:
             # gère la collision du tir et d'un alien
-            for key, value in dicoalien.items():
+            for key in dicoalien.keys():
                 if self.__posX > dicoalien.get(key)[0] and self.__posX < dicoalien.get(key)[0]+dicoalien.get(key)[2] and self.__posY > dicoalien.get(key)[1] and self.__posY < dicoalien.get(key)[1]+dicoalien.get(key)[3]:
                     self.__canv.delete(self.__pattern)
                     dicoalien.pop(key)
