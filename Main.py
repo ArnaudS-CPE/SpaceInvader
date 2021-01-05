@@ -63,9 +63,10 @@ def checkWinning(vaisseau,window):
     print(vaisseau.get_winning())
     if not vaisseau.get_winning():
         boiteMessage = messagebox.askyesno("Perdu", "Vous avez perdu !\n Voulez vous recommencer ?")
-        if boiteMessage == "Yes":
+        if boiteMessage == 1:
+            window.destroy()
             jeu() #commande pour recommencer
-        elif boiteMessage == "No":
+        elif boiteMessage == 0:
             print("vu")
             window.destroy() # commande pour quitter
     window.after(1000, lambda:[checkWinning(vaisseau, window)])
