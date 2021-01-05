@@ -115,6 +115,18 @@ class Vaisseau:
         self.__pattern = canevas.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, 
             width=2, outline='red', fill='white')
     
+    def get_posX(self):
+        return self.__posX
+    
+    def get_posY(self):
+        return self.__posY
+
+    def get_height(self):
+        return self.__height
+
+    def get_width(self):
+        return self.__width
+
     def evenement(self, event): # gestion des évènements claviers pour le déplacement et le tir du vaisseau
         touche = event.keysym
         print(touche) # affiche la touche du clavier, facultatif
@@ -168,8 +180,8 @@ class Tir:
             canevas.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
             mw.after(20,self.movementTirVaisseau)
     
-    def movementTirAlien(self):
-        k
+    def movementTirAlien(self): # gère le mouvement des tirs aliens
+        if self.__posX > """posX du vaisseau""" and self.__posX < """posX du vaisseau + largeur""" and self.__posY > """posY du vaisseau""" and self.__posY < """posY du vaisseau + hauteur""":
 
 
 class Mur: # protections pour le vaisseau
