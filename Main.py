@@ -70,7 +70,6 @@ def checkWinning(vaisseau,window):
             window.destroy()
             jeu() #commande pour recommencer
         elif boiteMessage == 0:
-            print("vu")
             window.destroy() # commande pour quitter
     window.after(1000, lambda:[checkWinning(vaisseau, window)])
 
