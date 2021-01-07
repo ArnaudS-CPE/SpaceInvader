@@ -213,7 +213,6 @@ class Tir:
                     return
             if self.__posY <=0: # collision avec le haut du canvas
                 return
-            #
             if True: # bouce infinie de déplacement
                 self.__posY -= 6
                 self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
@@ -231,11 +230,13 @@ class Tir:
                     self.__canv.delete(self.__cible.get_pattern())
                     self.__cible.set_winning()
                     # del le vaisseau
-                    
+            for key in dicomur.keys():
+                if self.__posX > dicomur.get(key)[0] and self.__posX < dicomur.get(key)[0]+dicomur.get(key)[2] and self.__posY > dicomur.get(key)[1] and self.__posY < dicomur.get(key)[1]+dicomur.get(key)[3]:
+                    self.__canv.delete(self.__pattern)
+                    dicomur.pop(key)
+                    return
             if self.__posY >= HauteurCanevas:
                 return
-            #
-
             elif True:
                 self.__posY += 6
                 self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY+6)
