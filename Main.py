@@ -56,9 +56,12 @@ def jeu():
 
     checkWinning(vaisseau, mw)
 
-    mur1 = mL.Mur(70, 100, 500, canevas, mw)
-    mur2 = mL.Mur(70, 250, 500, canevas, mw)
-    mur3 = mL.Mur(70, 350, 500, canevas, mw)
+    mur1 = mL.Mur(80, 60, 500, canevas, mw)
+    mur2 = mL.Mur(80, 200, 500, canevas, mw)
+    mur3 = mL.Mur(80, 340, 500, canevas, mw)
+    mur4 = mL.Mur(80, 480, 500, canevas, mw)
+    mur5 = mL.Mur(80, 620, 500, canevas, mw)
+    mur6 = mL.Mur(80, 760, 500, canevas, mw)
 
     mw.mainloop()
 
