@@ -15,6 +15,12 @@
 # • Permettre à l’utilisateur de changer les touches de contrôle
 # • Mettre des cheat codes afin de gagner des vies supplémentaires
 # • Laisser parler votre imagination et n’hésitez pas à demander conseil à vos ainés qui auraient perdu un temps précieux à jouer à ce jeu ! 
+# 
+# les tirs aliens ne se suppriment pas
+# On peut tirer sur nos propres murs, c'est un problème ?
+# le tir en rafale à nerf ? peut etre accessible en cheat code ?
+# messagebox pour rejouer apres avoir gagner ou système de niveaux
+# La forme du tir convient ?
 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
@@ -205,11 +211,9 @@ class Tir:
             if self.__posX >= self.__cible.get_posX() and self.__posX <= self.__cible.get_posX()+self.__cible.get_width() and self.__posY >= self.__cible.get_posY() and self.__posY <= self.__cible.get_posY()+self.__cible.get_height():
                 if self.__cible.get_vies() != 1:
                     self.__canv.delete(self.__pattern)
-                    print("-1")
                     self.__cible.set_vies(self.__cible.get_vies()-1)
                     return
                 else:
-                    print("éliminé")
                     self.__canv.delete(self.__pattern)
                     self.__canv.delete(self.__cible.get_pattern())
                     self.__cible.set_winning()
