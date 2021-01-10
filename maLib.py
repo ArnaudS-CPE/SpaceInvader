@@ -214,10 +214,12 @@ class Tir:
                     self.__cible.set_vies(self.__cible.get_vies()-1)
                     return
                 else:
+                    print("éliminé")
                     self.__canv.delete(self.__pattern)
                     self.__canv.delete(self.__cible.get_pattern())
                     self.__cible.set_winning()
-                    # del le vaisseau
+                    del self.__cible
+                    return
             for key in dicomur.keys():
                 if self.__posX > dicomur.get(key)[0] and self.__posX < dicomur.get(key)[0]+dicomur.get(key)[2] and self.__posY > dicomur.get(key)[1] and self.__posY < dicomur.get(key)[1]+dicomur.get(key)[3]:
                     self.__canv.delete(self.__pattern)
