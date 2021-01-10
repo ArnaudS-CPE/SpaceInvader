@@ -24,6 +24,7 @@
 # La forme du tir convient ?
 # est ce qu'on supprime le mur après avoir supprimer son dessin ? avec un del ... ?
 # actions à réaliser dans la condition de colision avec le vaisseau
+# partie gagné à réaliser en upgradant de niveau
 #  
 
 
@@ -43,13 +44,13 @@ dicoMur = {} # contient les murs non détruits
 class Alien:
     global LargeurCanevas, HauteurCanevas, dicoAlien
 
-    def __init__(self, posX, posY, height, width, vaisseau, canevas, mw):
+    def __init__(self, posX, posY, height, width, vaisseau, canevas, window):
         self.__height = height
         self.__width = width
         self.__posX = posX
         self.__posY = posY
         self.__canv = canevas
-        self.__window = mw
+        self.__window = window
         self.__ennemi = vaisseau
         self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='green', fill='yellow')
         dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height] # stocke dans un dictionnaire les positions en temps réel des aliens
@@ -116,14 +117,14 @@ class Alien:
 class Vaisseau:
     global LargeurCanevas, HauteurCanevas
 
-    def __init__(self, posX, posY, canevas, mw):
+    def __init__(self, posX, posY, canevas, window):
         self.__posX = posX
         self.__posY = posY
         self.__height = 50
         self.__width = 100
         self.__vies = 1
         self.__canv = canevas
-        self.__window = mw
+        self.__window = window
         self.__winning = True
         self.__pattern = self.__canv.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, 
             width=2, outline='red', fill='white')
@@ -182,13 +183,13 @@ class Vaisseau:
 class Tir:
     global dicoAlien
 
-    def __init__(self, posXTir, posYTir, direction, vaisseau, canevas, mw):
+    def __init__(self, posXTir, posYTir, direction, vaisseau, canevas, window):
         self.__posX = posXTir
         self.__posY = posYTir
         self.__direction = direction
         self.__cible = vaisseau
         self.__canv = canevas
-        self.__window = mw
+        self.__window = window
         if direction == 0 :
             self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
         else:
@@ -242,12 +243,12 @@ class Tir:
 
 class Mur: # protections pour le vaisseau
 
-    def __init__(self, width, posX, posY, canevas, mw):
+    def __init__(self, width, posX, posY, canevas, window):
         self.__width = width
         self.__posX = posX
         self.__posY = posY
         self.__canv = canevas
-        self.__window = mw
+        self.__window = window
         self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+30, width=3, outline='black', fill='grey25')
         dicoMur[self] = [self.__posX, self.__posY, self.__width, 30]
         self.verifMur()        
