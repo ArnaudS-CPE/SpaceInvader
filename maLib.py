@@ -97,6 +97,8 @@ class Alien:
         dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoalien, pourquoi ça n'en recrée pas un ?
 
     def createurTir(self):
+        if dicoalien == {} :
+            return
         alienTireur = random.choice(list(dicoalien.keys()))
         posXTir = alienTireur.__posX + (alienTireur.__width//2)
         posYTir =   alienTireur.__posY + alienTireur.__height
