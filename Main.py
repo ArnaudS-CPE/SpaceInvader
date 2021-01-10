@@ -17,7 +17,7 @@
 # • Laisser parler votre imagination et n’hésitez pas à demander conseil à vos ainés qui auraient perdu un temps précieux à jouer à ce jeu ! 
 
 
-from tkinter import Tk, Button, Canvas, messagebox
+from tkinter import Tk, Label, Button, Canvas, messagebox, LabelFrame
 import maLib as mL
 
 
@@ -30,7 +30,11 @@ def jeu():
 
     # création des widgets
     quit = Button(mw, text = "Quitter", command = mw.destroy)
+    # score = Label(mw, text = "Score : null")
+    # vies = Label(mw, text = "Vies : null")
+    # menu = LabelFrame(mw, text = 'titre du cadre', height = , width = )
     quit.pack(padx = 5, pady = 5)
+
     canevas = Canvas(mw, width = mL.LargeurCanevas, height = mL.HauteurCanevas, bg = "grey")
     canevas.pack(padx = 5, pady = 5)
 

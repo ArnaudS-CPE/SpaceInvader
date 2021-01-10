@@ -25,7 +25,8 @@
 # est ce qu'on supprime le mur après avoir supprimer son dessin ? avec un del ... ?
 # actions à réaliser dans la condition de colision avec le vaisseau
 # partie gagné à réaliser en upgradant de niveau
-#  
+# mettre une image de fond du canvas
+# travailler l'affichage de la fenetre
 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
@@ -191,9 +192,9 @@ class Tir:
         self.__canv = canevas
         self.__window = window
         if direction == 0 :
-            self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = "black")
+            self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = 'black', outline='yellow')
         else:
-            self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir+6, fill = "black")
+            self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir+6, fill = 'black', outline='black')
         self.movementTir() # Initie le déplacement du tir
             
     def movementTir(self):
