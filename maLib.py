@@ -19,7 +19,7 @@
 #
 # les tirs aliens ne se suppriment pas
 # On peut tirer sur nos propres murs, c'est un problème ?
-# le tir en rafale à nerf ? ( apparition d'un dicoTirsAllies et d'un dicoTirsAliens )peut etre accessible en cheat code ?
+# le tir en rafale à nerf ? ( apparition d'un bool pour les alliés )peut etre accessible en cheat code ?
 # messagebox pour rejouer apres avoir gagner ou système de niveaux
 # La forme du tir convient ?
 # est ce qu'on supprime le mur après avoir supprimer son dessin ? avec un del ... ?
