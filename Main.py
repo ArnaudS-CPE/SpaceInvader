@@ -63,7 +63,7 @@ def jeu():
 
     
 def checkWinning(vaisseau,window):
-    if not vaisseau.get_winning():
+    if not vaisseau.getWinning():
         boiteMessage = messagebox.askyesno("Perdu", "Vous avez perdu !\n Voulez vous recommencer ?")
         if boiteMessage == 1:
             window.destroy()

@@ -16,11 +16,15 @@
 # • Mettre des cheat codes afin de gagner des vies supplémentaires
 # • Laisser parler votre imagination et n’hésitez pas à demander conseil à vos ainés qui auraient perdu un temps précieux à jouer à ce jeu ! 
 # 
+#
 # les tirs aliens ne se suppriment pas
 # On peut tirer sur nos propres murs, c'est un problème ?
 # le tir en rafale à nerf ? peut etre accessible en cheat code ?
 # messagebox pour rejouer apres avoir gagner ou système de niveaux
 # La forme du tir convient ?
+# est ce qu'on supprime le mur après avoir supprimer son dessin ? avec un del ... ?
+# actions à réaliser dans la condition de colision avec le vaisseau
+#  
 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
@@ -29,15 +33,15 @@ import random
 LargeurCanevas = 900
 HauteurCanevas = 700
 
-DX=4
-DY=20
+DX=4 # déplacement des aliens en horizontale
+DY=20 # déplacement des aliens en verticale
 
-dicoalien = {} # contient les objets aliens et leurs informations 
-dicomur = {}
+dicoAlien = {} # contient les objets aliens et leurs informations quand ils sont en vie
+dicoMur = {} # contient les murs non détruits
 
 
 class Alien:
-    global LargeurCanevas, HauteurCanevas, dicoalien
+    global LargeurCanevas, HauteurCanevas, dicoAlien
 
     def __init__(self, posX, posY, height, width, vaisseau, canevas, mw):
         self.__height = height
@@ -48,58 +52,60 @@ class Alien:
         self.__window = mw
         self.__ennemi = vaisseau
         self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='green', fill='yellow')
-        dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height] # stocke dans un dictionnaire les positions en temps réel des aliens
+        dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height] # stocke dans un dictionnaire les positions en temps réel des aliens
         self.deplacementAlien() # initie le déplacement de l'alien
 
-    def get_posX(self):
+    def getPosX(self):
         return self.__posX
     
-    def get_posY(self):
+    def getPosY(self):
         return self.__posY
 
-    def get_height(self):
+    def getHeight(self):
         return self.__height
 
-    def get_width(self):
+    def getWidth(self):
         return self.__width
     
-    def get_pattern(self):
+    def getPattern(self):
         return self.__pattern
     
     def deplacementAlien(self) :
         global DX
 
         if self.__posX+self.__width+DX > LargeurCanevas : # touche le bord droit du canvas
-            for key in dicoalien.keys():
+            for key in dicoAlien.keys():
                 key.__posY += DY # déplacement vertical
                 if key != self:
                     key.__posX -= DX
             self.__posX += DX
             DX = -DX # changement de sens de déplacement  
         if self.__posX+DX < 3: # touche le bord gauche du canvas
-            for key in dicoalien.keys():
+            for key in dicoAlien.keys():
                 key.__posY += DY
             DX = -DX # changement de sens de déplacement
         if self.__posY > HauteurCanevas - 100: # condition de fin de partie perdante à revoir avec la collision vaisseau
             self.__canv.delete(self.__pattern)
             self.__canv.create_text(LargeurCanevas//2, HauteurCanevas//2, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
-        if self not in dicoalien: # vérifie la présence de l'alien dans le dictionnaire / si il est touché, pour le supprimer du canevas
+        if self not in dicoAlien: # vérifie la présence de l'alien dans le dictionnaire / si il est touché, pour le supprimer du canevas
             self.__canv.delete(self.__pattern)
-            if dicoalien == {} : # condition de sortie gagnante du jeu 
+            if dicoAlien == {} : # condition de sortie gagnante du jeu 
                 self.__canv.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Partie gagnée")
             return
 
-        #if # condition touche alien / vaisseau
+        if (self.__posX+self.__width > self.__ennemi.getPosX() and self.__posX+self.__width < self.__ennemi.getPosX()+self.__ennemi.getWidth() and self.__posY+self.__height > self.__ennemi.getPosY() and self.__posY+self.__height < self.__ennemi.getPosY()+self.__ennemi.getHeight() or 
+            self.__posX > self.__ennemi.getPosX() and self.__posX < self.__ennemi.getPosX()+self.__ennemi.getWidth() and self.__posY+self.__height > self.__ennemi.getPosY() and self.__posY+self.__height < self.__ennemi.getPosY()+self.__ennemi.getHeight()):# condition touche alien / vaisseau
+            print("collision")
 
         self.__posX += DX # déplacement horizontal
         self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height) # déplacement de l'alien
         self.__window.after(20, self.deplacementAlien) # déplacement en continu
-        dicoalien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoalien, pourquoi ça n'en recrée pas un ?
+        dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoAlien sur les aliens encore en déplacement
 
     def createurTir(self):
-        if dicoalien == {} :
+        if dicoAlien == {} :
             return
-        alienTireur = random.choice(list(dicoalien.keys()))
+        alienTireur = random.choice(list(dicoAlien.keys()))
         posXTir = alienTireur.__posX + (alienTireur.__width//2)
         posYTir =   alienTireur.__posY + alienTireur.__height
         tir = Tir(posXTir, posYTir, 1, self.__ennemi, self.__canv, self.__window) # instancie un objet de type Tir
@@ -122,31 +128,31 @@ class Vaisseau:
         self.__pattern = self.__canv.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, 
             width=2, outline='red', fill='white')
     
-    def get_posX(self):
+    def getPosX(self):
         return self.__posX
     
-    def get_posY(self):
+    def getPosY(self):
         return self.__posY
 
-    def get_height(self):
+    def getHeight(self):
         return self.__height
 
-    def get_width(self):
+    def getWidth(self):
         return self.__width
     
-    def get_vies(self):
+    def getVies(self):
         return self.__vies
 
-    def set_vies(self, newVies):
+    def setVies(self, newVies):
         self.__vies = newVies
 
-    def get_pattern(self):
+    def getPattern(self):
         return self.__pattern
 
-    def get_winning(self):
+    def getWinning(self):
         return self.__winning
     
-    def set_winning(self):
+    def setWinning(self):
         self.__winning = False
 
     def evenement(self, event): # gestion des évènements claviers pour le déplacement et le tir du vaisseau
@@ -174,7 +180,8 @@ class Vaisseau:
        
 
 class Tir:
-    global dicoalien
+    global dicoAlien
+
     def __init__(self, posXTir, posYTir, direction, vaisseau, canevas, mw):
         self.__posX = posXTir
         self.__posY = posYTir
@@ -188,20 +195,18 @@ class Tir:
             self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir+6, fill = "black")
         self.movementTir() # Initie le déplacement du tir
             
-        
-
     def movementTir(self):
         if self.__direction == 0:
             # gère la collision du tir et d'un alien
-            for key in dicoalien.keys():
-                if self.__posX > dicoalien.get(key)[0] and self.__posX < dicoalien.get(key)[0]+dicoalien.get(key)[2] and self.__posY > dicoalien.get(key)[1] and self.__posY < dicoalien.get(key)[1]+dicoalien.get(key)[3]:
+            for key in dicoAlien.keys():
+                if self.__posX > dicoAlien.get(key)[0] and self.__posX < dicoAlien.get(key)[0]+dicoAlien.get(key)[2] and self.__posY > dicoAlien.get(key)[1] and self.__posY < dicoAlien.get(key)[1]+dicoAlien.get(key)[3]:
                     self.__canv.delete(self.__pattern)
-                    dicoalien.pop(key)
+                    dicoAlien.pop(key)
                     return
-            for key in dicomur.keys():
-                if self.__posX > dicomur.get(key)[0] and self.__posX < dicomur.get(key)[0]+dicomur.get(key)[2] and self.__posY > dicomur.get(key)[1] and self.__posY < dicomur.get(key)[1]+dicomur.get(key)[3]:
+            for key in dicoMur.keys():
+                if self.__posX > dicoMur.get(key)[0] and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2] and self.__posY > dicoMur.get(key)[1] and self.__posY < dicoMur.get(key)[1]+dicoMur.get(key)[3]:
                     self.__canv.delete(self.__pattern)
-                    dicomur.pop(key)
+                    dicoMur.pop(key)
                     return
             if self.__posY <=0: # collision avec le haut du canvas
                 return
@@ -210,22 +215,22 @@ class Tir:
                 self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
                 self.__window.after(20,self.movementTir)
         else:
-            if self.__posX >= self.__cible.get_posX() and self.__posX <= self.__cible.get_posX()+self.__cible.get_width() and self.__posY >= self.__cible.get_posY() and self.__posY <= self.__cible.get_posY()+self.__cible.get_height():
-                if self.__cible.get_vies() != 1:
+            if self.__posX >= self.__cible.getPosX() and self.__posX <= self.__cible.getPosX()+self.__cible.getWidth() and self.__posY >= self.__cible.getPosY() and self.__posY <= self.__cible.getPosY()+self.__cible.getHeight():
+                if self.__cible.getVies() != 1:
                     self.__canv.delete(self.__pattern)
-                    self.__cible.set_vies(self.__cible.get_vies()-1)
+                    self.__cible.setVies(self.__cible.getVies()-1)
                     return
                 else:
                     print("éliminé")
                     self.__canv.delete(self.__pattern)
-                    self.__canv.delete(self.__cible.get_pattern())
-                    self.__cible.set_winning()
+                    self.__canv.delete(self.__cible.getPattern())
+                    self.__cible.setWinning()
                     del self.__cible
                     return
-            for key in dicomur.keys():
-                if self.__posX > dicomur.get(key)[0] and self.__posX < dicomur.get(key)[0]+dicomur.get(key)[2] and self.__posY > dicomur.get(key)[1] and self.__posY < dicomur.get(key)[1]+dicomur.get(key)[3]:
+            for key in dicoMur.keys():
+                if self.__posX > dicoMur.get(key)[0] and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2] and self.__posY > dicoMur.get(key)[1] and self.__posY < dicoMur.get(key)[1]+dicoMur.get(key)[3]:
                     self.__canv.delete(self.__pattern)
-                    dicomur.pop(key)
+                    dicoMur.pop(key)
                     return
             if self.__posY >= HauteurCanevas:
                 return
@@ -233,6 +238,7 @@ class Tir:
                 self.__posY += 6
                 self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY+6)
                 self.__window.after(20,self.movementTir)
+
 
 class Mur: # protections pour le vaisseau
 
@@ -243,13 +249,14 @@ class Mur: # protections pour le vaisseau
         self.__canv = canevas
         self.__window = mw
         self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+30, width=3, outline='black', fill='grey25')
-        dicomur[self] = [self.__posX, self.__posY, self.__width, 30]
+        dicoMur[self] = [self.__posX, self.__posY, self.__width, 30]
         self.verifMur()        
         
-    def get_pattern(self):
+    def getPattern(self):
         return self.__pattern
     
     def verifMur(self):
-        if self not in dicomur :
+        if self not in dicoMur :
             self.__canv.delete(self.__pattern)
+            # suppression mur ?
         self.__window.after(10, self.verifMur)
