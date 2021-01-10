@@ -19,14 +19,15 @@
 #
 # les tirs aliens ne se suppriment pas
 # On peut tirer sur nos propres murs, c'est un problème ?
-# le tir en rafale à nerf ? peut etre accessible en cheat code ?
+# le tir en rafale à nerf ? ( apparition d'un dicoTirsAllies et d'un dicoTirsAliens )peut etre accessible en cheat code ?
 # messagebox pour rejouer apres avoir gagner ou système de niveaux
 # La forme du tir convient ?
 # est ce qu'on supprime le mur après avoir supprimer son dessin ? avec un del ... ?
 # actions à réaliser dans la condition de colision avec le vaisseau
 # partie gagné à réaliser en upgradant de niveau
 # mettre une image de fond du canvas
-# travailler l'affichage de la fenetre
+# travailler l'affichage de la fenetre j'ai un ami qui à fait exactement le même affichage, j'irait surement lui demander.
+#  
 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
