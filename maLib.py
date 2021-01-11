@@ -17,17 +17,16 @@
 # • Laisser parler votre imagination et n’hésitez pas à demander conseil à vos ainés qui auraient perdu un temps précieux à jouer à ce jeu ! 
 # 
 #
-# les tirs aliens ne se suppriment pas
 # On peut tirer sur nos propres murs, c'est un problème ?
 # le tir en rafale à nerf ? ( apparition d'un bool pour les alliés )peut etre accessible en cheat code ?
 # messagebox pour rejouer apres avoir gagner ou système de niveaux
 # La forme du tir convient ?
-# est ce qu'on supprime le mur après avoir supprimer son dessin ? avec un del ... ?
-# actions à réaliser dans la condition de colision avec le vaisseau
 # partie gagné à réaliser en upgradant de niveau
 # mettre une image de fond du canvas
 # travailler l'affichage de la fenetre j'ai un ami qui à fait exactement le même affichage, j'irait surement lui demander.
-#  
+# ligne 126, si on met moins que 1001 ms de delai, les aliens semblent pas etre correctement supprimés
+# qu'est ce qui se passe si on est touché après avoir gagné la partie ? un tir qu'il reste ( mettre un self.__perdu dans les tirs ?)
+# mettre les petits murs qui se détruissent au fur et a mesure comme sur la photo dans les attendus du tp 
 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
@@ -38,6 +37,7 @@ HauteurCanevas = 700
 
 DX=4 # déplacement des aliens en horizontale
 DY=20 # déplacement des aliens en verticale
+DXVaisseau = 8 # déplacement du vaisseau en horizontale
 
 dicoAlien = {} # contient les objets aliens et leurs informations quand ils sont en vie
 dicoMur = {} # contient les murs non détruits
@@ -122,7 +122,7 @@ class Alien:
         posYTir =   alienTireur.__posY + alienTireur.__height
         tir = Tir(posXTir, posYTir, 1, self.__ennemi, self.__canv, self.__window) # instancie un objet de type Tir
         del tir # supprime le tir
-        self.__canv.after(3000, self.createurTir)
+        self.__canv.after(2000, self.createurTir)
 
 
 class Vaisseau:
@@ -168,20 +168,22 @@ class Vaisseau:
         self.__winning = False
 
     def evenement(self, event): # gestion des évènements claviers pour le déplacement et le tir du vaisseau
+        global DXVaisseau
+
         touche = event.keysym
         # print(touche) # affiche la touche du clavier, facultatif
         if touche == 'Right': # déplacement à droite
             if self.__posX+self.__width >= LargeurCanevas: # condition d'arret
                 pass
             else:
-                self.__posX += 6
+                self.__posX += DXVaisseau
                 self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
         
         if touche == 'Left': # déplacement à gauche
             if self.__posX <= 4: # condition d'arret
                 pass
             else:
-                self.__posX -= 6
+                self.__posX -= DXVaisseau
                 self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
         
         if touche == "space": # déclenche le tir du vaisseau
