@@ -27,7 +27,9 @@
 # ligne 126, si on met moins que 1001 ms de delai, les aliens semblent pas etre correctement supprimés
 # qu'est ce qui se passe si on est touché après avoir gagné la partie ? un tir qu'il reste ( mettre un self.__perdu dans les tirs ?)
 # mettre les petits murs qui se détruissent au fur et a mesure comme sur la photo dans les attendus du tp
-# mettre les vies du vaisseau à 3 à la fin du développement 
+# mettre les vies du vaisseau à 3 à la fin du développement
+# variable pour le pas de tir à mettre en place 
+# après collision alien/ vaisseau, ils tirent toujours 
 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
@@ -111,8 +113,9 @@ class Alien:
                 self.__canv.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Partie gagnée")
             return
 
+        # condition touche alien / vaisseau
         if (self.__posX+self.__width > self.__ennemi.getPosX() and self.__posX+self.__width < self.__ennemi.getPosX()+self.__ennemi.getWidth() and self.__posY+self.__height > self.__ennemi.getPosY() and self.__posY+self.__height < self.__ennemi.getPosY()+self.__ennemi.getHeight() or 
-            self.__posX > self.__ennemi.getPosX() and self.__posX < self.__ennemi.getPosX()+self.__ennemi.getWidth() and self.__posY+self.__height > self.__ennemi.getPosY() and self.__posY+self.__height < self.__ennemi.getPosY()+self.__ennemi.getHeight()): # condition touche alien / vaisseau
+            self.__posX > self.__ennemi.getPosX() and self.__posX < self.__ennemi.getPosX()+self.__ennemi.getWidth() and self.__posY+self.__height > self.__ennemi.getPosY() and self.__posY+self.__height < self.__ennemi.getPosY()+self.__ennemi.getHeight()):
             self.__canv.create_text(LargeurCanevas//2, HauteurCanevas//2, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
             for key in dicoAlien.keys():
                 key.setPerdu()
@@ -142,7 +145,8 @@ class Vaisseau:
         self.__posY = posY
         self.__height = 50
         self.__width = 100
-        self.__vies = 1
+        self.__vies = 3
+        self.__score = 0
         self.__canv = canevas
         self.__window = window
         self.__winning = True
@@ -169,12 +173,18 @@ class Vaisseau:
 
     def getPattern(self):
         return self.__pattern
+        
+    def getScore(self):
+        return self.__score
 
     def getWinning(self):
         return self.__winning
     
     def setWinning(self):
         self.__winning = False
+
+    def setScore(self):
+        self.__score += 100
 
     def evenement(self, event): # gestion des évènements claviers pour le déplacement et le tir du vaisseau
         global DXVaisseau
@@ -220,13 +230,15 @@ class Tir:
             
     def movementTir(self):
         if self.__direction == 0:
-            # gère la collision du tir et d'un alien
             for key in dicoAlien.keys():
+                # gère la collision du tir et d'un alien
                 if self.__posX > dicoAlien.get(key)[0] and self.__posX < dicoAlien.get(key)[0]+dicoAlien.get(key)[2] and self.__posY > dicoAlien.get(key)[1] and self.__posY < dicoAlien.get(key)[1]+dicoAlien.get(key)[3]:
                     self.__canv.delete(self.__pattern)
                     dicoAlien.pop(key)
+                    self.__cible.setScore()
                     return
             for key in dicoMur.keys():
+                # gère la collision du tir et d'un mur
                 if self.__posX > dicoMur.get(key)[0] and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2] and self.__posY > dicoMur.get(key)[1] and self.__posY < dicoMur.get(key)[1]+dicoMur.get(key)[3]:
                     self.__canv.delete(self.__pattern)
                     dicoMur.pop(key)
@@ -249,6 +261,7 @@ class Tir:
                     self.__canv.delete(self.__pattern)
                     self.__canv.delete(self.__cible.getPattern())
                     self.__cible.setWinning()
+                    self.__cible.setVies(self.__cible.getVies()-1)
                     del self.__cible
                     return
             for key in dicoMur.keys():
