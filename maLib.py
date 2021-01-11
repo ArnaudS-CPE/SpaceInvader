@@ -29,7 +29,9 @@
 # mettre les petits murs qui se détruissent au fur et a mesure comme sur la photo dans les attendus du tp
 # mettre les vies du vaisseau à 3 à la fin du développement
 # variable pour le pas de tir à mettre en place 
-# après collision alien/ vaisseau, ils tirent toujours 
+# après collision alien/ vaisseau, ils tirent toujours
+# les jaunes se décalent petit à petit vers la droite
+# vérifier les lignes 138-140 
 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
@@ -55,20 +57,21 @@ class Alien:
         self.__width = width
         self.__posX = posX
         self.__posY = posY
-        self.__perdu = False
+        self.__perdu = False # initie un bool qui dit que le joueur n'est pas en train de perdre
         self.__canv = canevas
         self.__window = window
         self.__ennemi = vaisseau
-        if self.__posY == 10:
+        if self.__posY == 10: # met la ligne du fond en jaune
             self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='white', fill='yellow')
-        elif self.__posY == 100:
+        elif self.__posY == 100: # met la ligne du milieu en bleu
             self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='white', fill='blue')
-        else:
+        else: # met la ligne du devant en rouge
             self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='white', fill='red')
 
         dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height] # stocke dans un dictionnaire les positions en temps réel des aliens
         self.deplacementAlien() # initie le déplacement de l'alien
 
+    # Getters
     def getPosX(self):
         return self.__posX
     
@@ -84,6 +87,7 @@ class Alien:
     def getPattern(self):
         return self.__pattern
 
+    # Setter
     def setPerdu(self):
         self.__perdu = True
         return self.__perdu
@@ -91,23 +95,26 @@ class Alien:
     def deplacementAlien(self) :
         global DX
 
-        if self.__perdu:
+        if self.__perdu: # si la valeur de l'attibut perdu est à 'True', tous les aliens se stoppent
             return
 
-        if self.__posX+self.__width+DX > LargeurCanevas : # touche le bord droit du canvas
+        # touche le bord droit du canvas
+        if self.__posX+self.__width+DX > LargeurCanevas :
             for key in dicoAlien.keys():
-                key.__posY += DY # déplacement vertical
-                if key != self:
+                key.__posY += DY # déplacement vertical vers le bas
+                if key != self: # si ce n'est pas l'alien qui vient de vérifier la condition, se déplace vers la gauche 
                     key.__posX -= DX
             self.__posX += DX
             DX = -DX # changement de sens de déplacement  
-
-        if self.__posX+DX < 3: # touche le bord gauche du canvas
+        
+        # touche le bord gauche du canvas
+        if self.__posX+DX < 3:
             for key in dicoAlien.keys():
-                key.__posY += DY
+                key.__posY += DY # déplacement vertical vers le bas
             DX = -DX # changement de sens de déplacement
-
-        if self not in dicoAlien: # vérifie la présence de l'alien dans le dictionnaire / si il est touché, pour le supprimer du canevas
+        
+        # vérifie la présence de l'alien dans le dictionnaire / si il est touché, pour le supprimer du canevas
+        if self not in dicoAlien:
             self.__canv.delete(self.__pattern)
             if dicoAlien == {} : # condition de sortie gagnante du jeu 
                 self.__canv.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Partie gagnée")
@@ -118,17 +125,24 @@ class Alien:
             self.__posX > self.__ennemi.getPosX() and self.__posX < self.__ennemi.getPosX()+self.__ennemi.getWidth() and self.__posY+self.__height > self.__ennemi.getPosY() and self.__posY+self.__height < self.__ennemi.getPosY()+self.__ennemi.getHeight()):
             self.__canv.create_text(LargeurCanevas//2, HauteurCanevas//2, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
             for key in dicoAlien.keys():
-                key.setPerdu()
+                key.setPerdu() # pour chaque alien, met son attribut __perdu à 'True'
 
         self.__posX += DX # déplacement horizontal
-        self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height) # déplacement de l'alien
-        self.__window.after(20, self.deplacementAlien) # déplacement en continu
+        self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height) # déplacement du pattern de l'alien
+        self.__window.after(20, self.deplacementAlien) # boucle de déplacement en continu
         dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoAlien sur les aliens encore en déplacement
 
     def createurTir(self):
         global freqTirAlien
+
+        # arrête les tirs des aliens si le vaisseau est collisionné avec un alien
+        if self.__perdu == True:
+            return # fct à vérifier 
+
+        # si tous les aliens sont touchés, arrête les tirs
         if dicoAlien == {} :
             return
+        
         alienTireur = choice(list(dicoAlien.keys()))
         posXTir = alienTireur.__posX + (alienTireur.__width//2)
         posYTir =   alienTireur.__posY + alienTireur.__height
