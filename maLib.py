@@ -94,8 +94,9 @@ class Alien:
     
     def deplacementAlien(self) :
         global DX
-
-        if self.__perdu: # si la valeur de l'attibut perdu est à 'True', tous les aliens se stoppent
+        
+        # si la valeur de l'attibut perdu est à 'True', tous les aliens se stoppent
+        if self.__perdu: 
             return
 
         # touche le bord droit du canvas
