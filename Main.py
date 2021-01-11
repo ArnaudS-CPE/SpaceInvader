@@ -35,8 +35,8 @@ def level1():
     
     quit = Button(mw, text = "Quit", command = mw.destroy)
     newGameButton = Button(mw, text = 'New Game', command = lambda:[mw.destroy(),level1()])
-    score = Label(mw, text = "Score : null")
-    vies = Label(mw, text = "Vies : null")
+    score = Label(mw, text = 'Score : 0')
+    vies = Label(mw, text = 'Vies : 3')
 
     score.grid(row=0, column=0, sticky='NW')
     vies.grid(row=0, column=0, sticky='NE')
@@ -88,6 +88,8 @@ def level1():
     alien1.createurTir()
 
     checkWinning(vaisseau, mw)
+    checkScore(score,vaisseau, mw)
+    checkVies(vies,vaisseau,mw)
 
     mur1 = mL.Mur(80, 60, 500, canevas, mw)
     mur2 = mL.Mur(80, 200, 500, canevas, mw)
@@ -109,5 +111,16 @@ def checkWinning(vaisseau,window):
         elif boiteMessage == 0:
             window.destroy() # commande pour quitter
     window.after(100, lambda:[checkWinning(vaisseau, window)])
+
+def checkScore(score,vaisseau,window):
+    if score['text'] != 'Score : '+str(vaisseau.getScore()):
+        score['text'] = 'Score : '+str(vaisseau.getScore())
+    window.after(100, lambda:[checkScore(score,vaisseau,window)])
+
+def checkVies(vies,vaisseau,window):
+    if vies['text'] != 'Vies : '+str(vaisseau.getVies()):
+        vies['text'] = 'Vies : '+str(vaisseau.getVies())
+    window.after(100, lambda:[checkVies(vies,vaisseau,window)])
+
 
 level1()
