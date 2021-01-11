@@ -51,6 +51,7 @@ class Alien:
         self.__width = width
         self.__posX = posX
         self.__posY = posY
+        self.__perdu = False
         self.__canv = canevas
         self.__window = window
         self.__ennemi = vaisseau
@@ -72,9 +73,16 @@ class Alien:
     
     def getPattern(self):
         return self.__pattern
+
+    def setPerdu(self):
+        self.__perdu = True
+        return self.__perdu
     
     def deplacementAlien(self) :
         global DX
+
+        if self.__perdu:
+            return
 
         if self.__posX+self.__width+DX > LargeurCanevas : # touche le bord droit du canvas
             for key in dicoAlien.keys():
@@ -83,13 +91,12 @@ class Alien:
                     key.__posX -= DX
             self.__posX += DX
             DX = -DX # changement de sens de déplacement  
+
         if self.__posX+DX < 3: # touche le bord gauche du canvas
             for key in dicoAlien.keys():
                 key.__posY += DY
             DX = -DX # changement de sens de déplacement
-        if self.__posY > HauteurCanevas - 100: # condition de fin de partie perdante à revoir avec la collision vaisseau
-            self.__canv.delete(self.__pattern)
-            self.__canv.create_text(LargeurCanevas//2, HauteurCanevas//2, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
+
         if self not in dicoAlien: # vérifie la présence de l'alien dans le dictionnaire / si il est touché, pour le supprimer du canevas
             self.__canv.delete(self.__pattern)
             if dicoAlien == {} : # condition de sortie gagnante du jeu 
@@ -97,8 +104,10 @@ class Alien:
             return
 
         if (self.__posX+self.__width > self.__ennemi.getPosX() and self.__posX+self.__width < self.__ennemi.getPosX()+self.__ennemi.getWidth() and self.__posY+self.__height > self.__ennemi.getPosY() and self.__posY+self.__height < self.__ennemi.getPosY()+self.__ennemi.getHeight() or 
-            self.__posX > self.__ennemi.getPosX() and self.__posX < self.__ennemi.getPosX()+self.__ennemi.getWidth() and self.__posY+self.__height > self.__ennemi.getPosY() and self.__posY+self.__height < self.__ennemi.getPosY()+self.__ennemi.getHeight()):# condition touche alien / vaisseau
-            print("collision")
+            self.__posX > self.__ennemi.getPosX() and self.__posX < self.__ennemi.getPosX()+self.__ennemi.getWidth() and self.__posY+self.__height > self.__ennemi.getPosY() and self.__posY+self.__height < self.__ennemi.getPosY()+self.__ennemi.getHeight()): # condition touche alien / vaisseau
+            self.__canv.create_text(LargeurCanevas//2, HauteurCanevas//2, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
+            for key in dicoAlien.keys():
+                key.setPerdu()
 
         self.__posX += DX # déplacement horizontal
         self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height) # déplacement de l'alien
@@ -212,6 +221,7 @@ class Tir:
                     dicoMur.pop(key)
                     return
             if self.__posY <=0: # collision avec le haut du canvas
+                self.__canv.delete(self.__pattern)
                 return
             if True: # bouce infinie de déplacement
                 self.__posY -= 6
@@ -236,6 +246,7 @@ class Tir:
                     dicoMur.pop(key)
                     return
             if self.__posY >= HauteurCanevas:
+                self.__canv.delete(self.__pattern)
                 return
             elif True:
                 self.__posY += 6
@@ -261,5 +272,6 @@ class Mur: # protections pour le vaisseau
     def verifMur(self):
         if self not in dicoMur :
             self.__canv.delete(self.__pattern)
-            # suppression mur ?
+            del self
+            return
         self.__window.after(10, self.verifMur)
