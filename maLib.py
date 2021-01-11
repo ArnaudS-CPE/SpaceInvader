@@ -26,11 +26,12 @@
 # travailler l'affichage de la fenetre j'ai un ami qui à fait exactement le même affichage, j'irait surement lui demander.
 # ligne 126, si on met moins que 1001 ms de delai, les aliens semblent pas etre correctement supprimés
 # qu'est ce qui se passe si on est touché après avoir gagné la partie ? un tir qu'il reste ( mettre un self.__perdu dans les tirs ?)
-# mettre les petits murs qui se détruissent au fur et a mesure comme sur la photo dans les attendus du tp 
+# mettre les petits murs qui se détruissent au fur et a mesure comme sur la photo dans les attendus du tp
+# mettre les vies du vaisseau à 3 à la fin du développement 
 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
-import random
+from random import choice
 
 LargeurCanevas = 900
 HauteurCanevas = 700
@@ -38,6 +39,7 @@ HauteurCanevas = 700
 DX=4 # déplacement des aliens en horizontale
 DY=20 # déplacement des aliens en verticale
 DXVaisseau = 8 # déplacement du vaisseau en horizontale
+freqTirAlien = 2000 # 
 
 dicoAlien = {} # contient les objets aliens et leurs informations quand ils sont en vie
 dicoMur = {} # contient les murs non détruits
@@ -55,7 +57,13 @@ class Alien:
         self.__canv = canevas
         self.__window = window
         self.__ennemi = vaisseau
-        self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='green', fill='yellow')
+        if self.__posY == 10:
+            self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='white', fill='yellow')
+        elif self.__posY == 100:
+            self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='white', fill='blue')
+        else:
+            self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='white', fill='red')
+
         dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height] # stocke dans un dictionnaire les positions en temps réel des aliens
         self.deplacementAlien() # initie le déplacement de l'alien
 
@@ -115,14 +123,15 @@ class Alien:
         dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoAlien sur les aliens encore en déplacement
 
     def createurTir(self):
+        global freqTirAlien
         if dicoAlien == {} :
             return
-        alienTireur = random.choice(list(dicoAlien.keys()))
+        alienTireur = choice(list(dicoAlien.keys()))
         posXTir = alienTireur.__posX + (alienTireur.__width//2)
         posYTir =   alienTireur.__posY + alienTireur.__height
         tir = Tir(posXTir, posYTir, 1, self.__ennemi, self.__canv, self.__window) # instancie un objet de type Tir
         del tir # supprime le tir
-        self.__canv.after(2000, self.createurTir)
+        self.__canv.after(freqTirAlien, self.createurTir)
 
 
 class Vaisseau:
