@@ -17,26 +17,41 @@
 # • Laisser parler votre imagination et n’hésitez pas à demander conseil à vos ainés qui auraient perdu un temps précieux à jouer à ce jeu ! 
 
 
-from tkinter import Tk, Label, Button, Canvas, messagebox, LabelFrame
+from tkinter import Tk, Label, Button, Canvas, messagebox, LabelFrame, PhotoImage
 import maLib as mL
 
 
-def jeu():
+def level1():
     # création de la fenetre
     mw = Tk()
-    mw.geometry(str(mL.LargeurCanevas+20) + "x" + str(mL.HauteurCanevas+20))
+    mw.geometry(str(mL.LargeurCanevas+100) + "x" + str(mL.HauteurCanevas))
     mw.title("Space Invader")
     mw.minsize(mL.HauteurCanevas, mL.LargeurCanevas)
 
     # création des widgets
-    quit = Button(mw, text = "Quitter", command = mw.destroy)
-    # score = Label(mw, text = "Score : null")
-    # vies = Label(mw, text = "Vies : null")
-    # menu = LabelFrame(mw, text = 'titre du cadre', height = , width = )
-    quit.pack(padx = 5, pady = 5)
-
     canevas = Canvas(mw, width = mL.LargeurCanevas, height = mL.HauteurCanevas, bg = "grey")
-    canevas.pack(padx = 5, pady = 5)
+    backgroundPicture = PhotoImage(file = 'Earth.gif')
+    canevas.create_image(450,350, image=backgroundPicture)
+    
+    quit = Button(mw, text = "Quit", command = mw.destroy)
+    newGameButton = Button(mw, text = 'New Game', command = lambda:[mw.destroy(),level1()])
+    score = Label(mw, text = "Score : null")
+    vies = Label(mw, text = "Vies : null")
+
+    score.grid(row=0, column=0, sticky='NW')
+    vies.grid(row=0, column=0, sticky='NE')
+    quit.grid(row=3, column=1, sticky='N', padx=5)
+    newGameButton.grid(row=2, column=1, sticky='N', padx=5)
+    canevas.grid(row=1, column=0, rowspan=3, padx=5)
+
+
+    
+    
+    # menu = LabelFrame(mw, text = 'titre du cadre', height = , width = )
+    # quit.pack(padx = 5, pady = 5)
+
+    
+    # canevas.pack(padx = 5, pady = 5)
 
 
     vaisseau = mL.Vaisseau(10,600, canevas, mw)
@@ -71,9 +86,9 @@ def checkWinning(vaisseau,window):
         boiteMessage = messagebox.askyesno("Perdu", "Vous avez perdu !\n Voulez vous recommencer ?")
         if boiteMessage == 1:
             window.destroy()
-            jeu() #commande pour recommencer
+            level1() #commande pour recommencer
         elif boiteMessage == 0:
             window.destroy() # commande pour quitter
     window.after(100, lambda:[checkWinning(vaisseau, window)])
 
-jeu()
+level1()
