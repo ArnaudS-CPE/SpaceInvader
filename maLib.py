@@ -195,7 +195,7 @@ class Tir:
         if direction == 0 :
             self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = 'black', outline='yellow')
         else:
-            self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir+6, fill = 'black', outline='black')
+            self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir+6, fill = 'black', outline='red')
         self.movementTir() # Initie le déplacement du tir
             
     def movementTir(self):

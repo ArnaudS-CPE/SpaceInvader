@@ -29,9 +29,9 @@ def level1():
     mw.minsize(mL.HauteurCanevas, mL.LargeurCanevas)
 
     # création des widgets
-    canevas = Canvas(mw, width = mL.LargeurCanevas, height = mL.HauteurCanevas, bg = "grey")
+    canevas = Canvas(mw, width = mL.LargeurCanevas, height = mL.HauteurCanevas, bg = 'grey')
     backgroundPicture = PhotoImage(file = 'Earth.gif')
-    canevas.create_image(450,350, image=backgroundPicture)
+    canevas.create_image(453,353, image=backgroundPicture)
     
     quit = Button(mw, text = "Quit", command = mw.destroy)
     newGameButton = Button(mw, text = 'New Game', command = lambda:[mw.destroy(),level1()])
