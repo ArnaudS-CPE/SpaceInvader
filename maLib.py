@@ -26,15 +26,12 @@
 # travailler l'affichage de la fenetre j'ai un ami qui à fait exactement le même affichage, j'irait surement lui demander.
 # ligne 126, si on met moins que 1001 ms de delai, les aliens semblent pas etre correctement supprimés
 # qu'est ce qui se passe si on est touché après avoir gagné la partie ? un tir qu'il reste ( mettre un self.__perdu dans les tirs ?)
-<<<<<<< HEAD
-=======
 # mettre les petits murs qui se détruissent au fur et a mesure comme sur la photo dans les attendus du tp
 # mettre les vies du vaisseau à 3 à la fin du développement
 # variable pour le pas de tir à mettre en place 
 # après collision alien/ vaisseau, ils tirent toujours
 # les jaunes se décalent petit à petit vers la droite
 # vérifier les lignes 138-140 
->>>>>>> ee1dea9039cb1a20f35c912cd570ba71b004cd5d
 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
@@ -97,9 +94,8 @@ class Alien:
     
     def deplacementAlien(self) :
         global DX
-        
-        # si la valeur de l'attibut perdu est à 'True', tous les aliens se stoppent
-        if self.__perdu: 
+
+        if self.__perdu: # si la valeur de l'attibut perdu est à 'True', tous les aliens se stoppent
             return
 
         # touche le bord droit du canvas
@@ -298,16 +294,15 @@ class Tir:
 
 class Mur: # protections pour le vaisseau
 
-    def __init__(self, width, height, posX, posY, canevas, window):
+    def __init__(self, width, posX, posY, canevas, window):
         self.__width = width
-        self.__height = height
         self.__posX = posX
         self.__posY = posY
         self.__canv = canevas
         self.__window = window
-        self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=2, outline='black', fill='grey25')
-        dicoMur[self] = [self.__posX, self.__posY, self.__width, self.__height]
-        self.verifMur()
+        self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+30, width=3, outline='black', fill='grey25')
+        dicoMur[self] = [self.__posX, self.__posY, self.__width, 30]
+        self.verifMur()        
         
     def getPattern(self):
         return self.__pattern
@@ -318,18 +313,3 @@ class Mur: # protections pour le vaisseau
             del self
             return
         self.__window.after(10, self.verifMur)
-
-
-class AlienBonus:
-
-    def __init__(self, width, height, posX, posY, canevas, window):
-        self.__width = width
-        self.__height = height
-        self.__posX = posX
-        self.__posY = posY
-        self.__vies = 3
-        self.__canv = canevas
-        self.__window = window
-        self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=2, outline='red', fill='orange')
-        
-        
