@@ -85,6 +85,7 @@ def jeu(scoreactuel):
     checkScore(score,vaisseau, mw)
     checkVies(vies,vaisseau,mw)
 
+    # blocs de murs
     for k in range(8) :
         for l in range(2) :
             mur1 = mL.Mur(20, 20, 75+k*20, 520+l*20, canevas, mw)

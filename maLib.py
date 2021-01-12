@@ -36,8 +36,9 @@ from random import choice
 LargeurCanevas = 900
 HauteurCanevas = 700
 
-DX=4 # déplacement des aliens en horizontale
-DY=20 # déplacement des aliens en verticale
+DX = 4 # déplacement des aliens en horizontale
+DXbonus = 8 # déplacement de l'alien bonus en horizontale
+DY=50 # déplacement des aliens en verticale
 DXVaisseau = 8 # déplacement du vaisseau en horizontale
 freqTirAlien = 2000 #
 lengthTir = 6
@@ -315,15 +316,70 @@ class Mur: # protections pour le vaisseau
 
 
 class AlienBonus:
-    def __init__(self, width, height, posX, posY, canevas, window):
+    def __init__(self, posX, posY, width, height, vaisseau, canevas, window):
         self.__posX = posX
         self.__posY = posY
-        self.__height = 50
-        self.__width = 100
+        self.__width = width
+        self.__height = height
         self.__vies = 3
-        self.__score = 0
         self.__canv = canevas
         self.__window = window
-        self.__winning = True
-        self.__pattern = self.__canv.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, 
-            width=2, outline='red', fill='white')
+        self.__ennemi = vaisseau
+        self.__pattern = self.__canv.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, width=2, outline='red', fill='orange')
+        dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height]
+        self.deplacementAlienBonus()
+
+    def deplacementAlienBonus(self) :
+        global DXbonus
+        # touche le bord droit du canvas
+        if self.__posX+self.__width+DXbonus > LargeurCanevas :
+            for key in dicoAlien.keys():
+                key.__posY += DY # déplacement vertical vers le bas
+                if key != self: # si ce n'est pas l'alien qui vient de vérifier la condition, se déplace vers la gauche 
+                    key.__posX -= DXbonus
+            self.__posX += DXbonus
+            DXbonus = -DXbonus # changement de sens de déplacement  
+        
+        # touche le bord gauche du canvas
+        if self.__posX+DXbonus < 3:
+            for key in dicoAlien.keys():
+                key.__posY += DY # déplacement vertical vers le bas
+            DXbonus = -DXbonus # changement de sens de déplacement
+        
+        # vérifie la présence de l'alien dans le dictionnaire / si il est touché, pour le supprimer du canevas
+        if self not in dicoAlien:
+            self.__canv.delete(self.__pattern)
+            if dicoAlien == {} : # condition de sortie gagnante du jeu 
+                self.__canv.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Partie gagnée")
+            return
+
+        # condition touche alien / vaisseau
+        if (self.__posX+self.__width > self.__ennemi.getPosX() and self.__posX+self.__width < self.__ennemi.getPosX()+self.__ennemi.getWidth() and self.__posY+self.__height > self.__ennemi.getPosY() and self.__posY+self.__height < self.__ennemi.getPosY()+self.__ennemi.getHeight() or 
+            self.__posX > self.__ennemi.getPosX() and self.__posX < self.__ennemi.getPosX()+self.__ennemi.getWidth() and self.__posY+self.__height > self.__ennemi.getPosY() and self.__posY+self.__height < self.__ennemi.getPosY()+self.__ennemi.getHeight()):
+            self.__canv.create_text(LargeurCanevas//2, HauteurCanevas//2, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
+            self.__ennemi.setWinning()
+            for key in dicoAlien.keys():
+                key.setPerdu() # pour chaque alien, met son attribut __perdu à 'True'
+
+        self.__posX += DXbonus # déplacement horizontal
+        self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height) # déplacement du pattern de l'alien
+        self.__window.after(20, self.deplacementAlienBonus) # boucle de déplacement en continu
+        dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoAlien sur les aliens encore en déplacement
+
+    def createurTirBonus(self):
+        global freqTirAlien
+
+        # arrête les tirs des aliens si le vaisseau est collisionné avec un alien
+        if self.__perdu == True:
+            return # fct à vérifier 
+
+        # si tous les aliens sont touchés, arrête les tirs
+        if dicoAlien == {} :
+            return
+        
+        alienTireur = choice(list(dicoAlien.keys()))
+        posXTir = alienTireur.__posX + (alienTireur.__width//2)
+        posYTir =   alienTireur.__posY + alienTireur.__height
+        tir = Tir(posXTir, posYTir, 1, self.__ennemi, self.__canv, self.__window) # instancie un objet de type Tir
+        del tir # supprime le tir
+        self.__canv.after(freqTirAlien, self.createurTir)
