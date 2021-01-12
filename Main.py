@@ -22,7 +22,7 @@ import maLib as mL
 
 frequence = 3001
 
-def jeu(scoreactuel):
+def jeu(scoreactuel, niveau):
     global frequence
 
     # création de la fenetre
@@ -37,15 +37,18 @@ def jeu(scoreactuel):
     canevas.create_image(453,353, image=backgroundPicture)
     
     quit = Button(mw, text = "Quit", command = mw.destroy)
-    newGameButton = Button(mw, text = 'New Game', command = lambda:[mw.destroy(),jeu(0)])
+    newGameButton = Button(mw, text = 'New Game', command = lambda:[mw.destroy(),jeu(0,1)])
     score = Label(mw, text = 'Score :'+str(scoreactuel))
     vies = Label(mw, text = 'Vies : 3')
+    niveauLabel = Label(mw, text = 'Niveau :'+str(niveau))
 
+    
     score.grid(row=0, column=0, sticky='NW')
-    vies.grid(row=0, column=0, sticky='NE')
-    quit.grid(row=3, column=1, sticky='N', padx=5)
-    newGameButton.grid(row=2, column=1, sticky='N', padx=5)
-    canevas.grid(row=1, column=0, rowspan=3, padx=5)
+    niveauLabel.grid(row=0, column=1, sticky='N')
+    vies.grid(row=0, column=2, sticky='NE')
+    quit.grid(row=3, column=3, sticky='N', padx=5)
+    newGameButton.grid(row=2, column=3, sticky='N', padx=5)
+    canevas.grid(row=1, column=0, rowspan=3, columnspan=3, padx=5)
 
     vaisseau = mL.Vaisseau(10,600, canevas, mw)
     vaisseau.setScore(scoreactuel)
@@ -81,7 +84,7 @@ def jeu(scoreactuel):
 
     alien1.createurTir()
 
-    checkWinning(vaisseau, mw)
+    checkWinning(niveau,vaisseau, mw)
     checkScore(score,vaisseau, mw)
     checkVies(vies,vaisseau,mw)
 
@@ -102,7 +105,7 @@ def jeu(scoreactuel):
 
 
     
-def checkWinning(vaisseau,window):
+def checkWinning(niveau,vaisseau,window):
     global frequence
     if mL.dicoAlien == {}:
         boiteMessage = messagebox.showinfo(title='Continuer à jouer ?', message='Passage au niveau supérieur')
@@ -110,15 +113,15 @@ def checkWinning(vaisseau,window):
             frequence -= 200
         scoreactuel = vaisseau.getScore()
         window.destroy()
-        jeu(scoreactuel) #commande pour continuer le jeu
+        jeu(scoreactuel,niveau+1) #commande pour continuer le jeu
     if not vaisseau.getWinning():
         boiteMessage = messagebox.askyesno("Perdu", "Vous avez perdu !\n Voulez vous recommencer ?")
         if boiteMessage == 1:
             window.destroy()
-            jeu(0) #commande pour recommencer
+            jeu(0,1) #commande pour recommencer
         elif boiteMessage == 0:
             window.destroy() # commande pour quitter
-    window.after(200, lambda:[checkWinning(vaisseau, window)])
+    window.after(200, lambda:[checkWinning(niveau,vaisseau, window)])
 
 def checkScore(score,vaisseau,window):
     if score['text'] != 'Score : '+str(vaisseau.getScore()):
@@ -129,6 +132,11 @@ def checkVies(vies,vaisseau,window):
     if vies['text'] != 'Vies : '+str(vaisseau.getVies()):
         vies['text'] = 'Vies : '+str(vaisseau.getVies())
     window.after(100, lambda:[checkVies(vies,vaisseau,window)])
+    
+def checkNiveau(niveau,niveauLabel,window):
+    if niveauLabel['text'] != 'Niveau : '+str(niveau):
+        niveauLabel['text'] = 'Niveau : '+str(niveau)
+    window.after(100, lambda:[checkNiveau(niveau,niveauLabel,window)])
 
 
-jeu(0)
+jeu(0,1)
