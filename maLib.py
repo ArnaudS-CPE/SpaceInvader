@@ -39,7 +39,7 @@ HauteurCanevas = 700
 
 DX = 4 # déplacement des aliens en horizontale
 DXbonus = 8 # déplacement de l'alien bonus en horizontale
-DY=50 # déplacement des aliens en verticale
+DY=20 # déplacement des aliens en verticale
 DXVaisseau = 8 # déplacement du vaisseau en horizontale
 freqTirAlien = 2000
 freqTirAlienBonus = 1000 #
@@ -52,6 +52,8 @@ for i in range(10) :
 
 dicoAlien = {} # contient les objets aliens et leurs informations quand ils sont en vie
 dicoMur = {} # contient les murs non détruits
+
+listCheat = []
 
 
 class Alien:
@@ -170,7 +172,7 @@ class Alien:
 
 
 class Vaisseau:
-    global LargeurCanevas, HauteurCanevas
+    global LargeurCanevas, HauteurCanevas, listCheat
 
     def __init__(self, posX, posY, canevas, window):
         self.__posX = posX
@@ -222,7 +224,7 @@ class Vaisseau:
         global DXVaisseau
 
         touche = event.keysym
-        # print(touche) # affiche la touche du clavier, facultatif
+        print(touche) # affiche la touche du clavier, facultatif
         if touche == 'Right': # déplacement à droite
             if self.__posX+self.__width >= LargeurCanevas: # condition d'arret
                 pass
@@ -242,7 +244,21 @@ class Vaisseau:
             posYTir = self.__posY
             tir = Tir(posXTir, posYTir, 0, self, self.__canv, self.__window) # instancie un objet de type Tir
             del tir # supprime le tir
-       
+
+        if touche == "v":
+            listCheat.append('v')
+        if (touche == "i") and (listCheat ==['v']):
+            listCheat.append('i')
+        elif ((touche == "i") and listCheat !=['v']):
+            listCheat.pop()
+        if (touche == "e") and (listCheat == ['v', 'i']):
+            listCheat.append('e')
+            self.setVies(3)
+        elif ((touche == "e") and (listCheat ==['v'])):
+            listCheat.pop()
+            listCheat.pop()
+
+        
 
 class Tir:
     global dicoAlien, lengthTir, vieAlien
