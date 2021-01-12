@@ -40,7 +40,7 @@ def jeu(scoreactuel, niveau):
     newGameButton = Button(mw, text = 'New Game', command = lambda:[mw.destroy(),jeu(0,1)])
     score = Label(mw, text = 'Score :'+str(scoreactuel))
     vies = Label(mw, text = 'Vies : 3')
-    niveauLabel = Label(mw, text = 'Niveau :'+str(niveau))
+    niveauLabel = Label(mw, text = 'Niveau : '+str(niveau))
 
     
     score.grid(row=0, column=0, sticky='NW')

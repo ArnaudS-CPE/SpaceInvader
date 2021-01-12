@@ -45,12 +45,17 @@ freqTirAlien = 2000
 freqTirAlienBonus = 1000 #
 lengthTir = 6
 
+# on définie le nombre de vies de l'alien bonus
+vieAlien = []
+for i in range(10) :
+    vieAlien.append(1)
+
 dicoAlien = {} # contient les objets aliens et leurs informations quand ils sont en vie
 dicoMur = {} # contient les murs non détruits
 
 
 class Alien:
-    global LargeurCanevas, HauteurCanevas, dicoAlien
+    global LargeurCanevas, HauteurCanevas, dicoAlien, dicoMur
 
     def __init__(self, posX, posY, height, width, frequence, vaisseau, canevas, window):
         self.__height = height
@@ -119,6 +124,7 @@ class Alien:
             self.__canv.delete(self.__pattern)
             if dicoAlien == {} : # condition de sortie gagnante du jeu 
                 self.__canv.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Partie gagnée")
+                dicoMur = {}
             return
 
         # condition touche alien / vaisseau
@@ -227,7 +233,7 @@ class Vaisseau:
        
 
 class Tir:
-    global dicoAlien, lengthTir
+    global dicoAlien, lengthTir, vieAlien
 
     def __init__(self, posXTir, posYTir, direction, vaisseau, canevas, window):
         self.__posX = posXTir
@@ -256,11 +262,15 @@ class Tir:
                         return
                     # cas de l'alien bonus
                     if dicoAlien.get(key)[4] == 1 :
-                        self.__canv.delete(self.__pattern)
-                        dicoAlien.pop(key)
-                        self.__cible.setScore(100)
-                        print('testtesttest')
-                        return
+                        if len(vieAlien) == 1 :
+                            self.__canv.delete(self.__pattern)
+                            dicoAlien.pop(key)
+                            self.__cible.setScore(500)
+                            return
+                        else :
+                            self.__canv.delete(self.__pattern)
+                            vieAlien.pop()
+                            return
             for key in dicoMur.keys():
                 # gère la collision du tir et d'un mur
                 if self.__posX > dicoMur.get(key)[0]-2 and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2]+2 and self.__posY > dicoMur.get(key)[1] and self.__posY < dicoMur.get(key)[1]+dicoMur.get(key)[3]:
@@ -327,7 +337,7 @@ class Mur: # protections pour le vaisseau
 
 
 class AlienBonus:
-    global LargeurCanevas, HauteurCanevas, dicoAlien
+    global LargeurCanevas, HauteurCanevas, dicoAlien, dicoMur
 
     def __init__(self, posX, posY, width, height, vaisseau, canevas, window):
         self.__posX = posX
@@ -369,6 +379,7 @@ class AlienBonus:
             self.__canv.delete(self.__pattern)
             if dicoAlien == {} : # condition de sortie gagnante du jeu 
                 self.__canv.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Partie gagnée")
+                dicoMur = {}
             return
 
         # condition touche alien / vaisseau
