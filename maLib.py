@@ -29,6 +29,7 @@
 # variable pour le pas de tir à mettre en place 
 # les jaunes se décalent petit à petit vers la droite
 # vérifier les lignes 138-140 
+# pas de focus sur la page d'un nouveau niveau (que sur windows?)
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
 from random import choice
@@ -68,7 +69,7 @@ class Alien:
         else: # met la ligne du devant en rouge
             self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='white', fill='red')
 
-        dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height] # stocke dans un dictionnaire les positions en temps réel des aliens
+        dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height, 0] # stocke dans un dictionnaire les positions en temps réel des aliens
         self.deplacementAlien() # initie le déplacement de l'alien
 
     # Getters
@@ -247,16 +248,19 @@ class Tir:
             for key in dicoAlien.keys():
                 # gère la collision du tir et d'un alien
                 if self.__posX > dicoAlien.get(key)[0] and self.__posX < dicoAlien.get(key)[0]+dicoAlien.get(key)[2] and self.__posY > dicoAlien.get(key)[1] and self.__posY < dicoAlien.get(key)[1]+dicoAlien.get(key)[3]:
-                    self.__canv.delete(self.__pattern)
-                    dicoAlien.pop(key)
-                    self.__cible.setScore(100)
-                    return
-            for key in dicoAlien.keys():
-                # gère la collision du tir et de l'alien bonus
-                if self.__posX > dicoAlien.get(key)[0] and self.__posX < dicoAlien.get(key)[0]+dicoAlien.get(key)[2] and self.__posY > dicoAlien.get(key)[1] and self.__posY < dicoAlien.get(key)[1]+dicoAlien.get(key)[3]:
-                    self.__canv.delete(self.__pattern)
-                    dicoAlien.pop(key)
-                    self.__cible.setScore(500)
+                    # cas des aliens normaux
+                    if dicoAlien.get(key)[4] == 0 :
+                        self.__canv.delete(self.__pattern)
+                        dicoAlien.pop(key)
+                        self.__cible.setScore(100)
+                        return
+                    # cas de l'alien bonus
+                    if dicoAlien.get(key)[4] == 1 :
+                        self.__canv.delete(self.__pattern)
+                        dicoAlien.pop(key)
+                        self.__cible.setScore(100)
+                        print('testtesttest')
+                        return
             for key in dicoMur.keys():
                 # gère la collision du tir et d'un mur
                 if self.__posX > dicoMur.get(key)[0]-2 and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2]+2 and self.__posY > dicoMur.get(key)[1] and self.__posY < dicoMur.get(key)[1]+dicoMur.get(key)[3]:
@@ -378,7 +382,7 @@ class AlienBonus:
         self.__posX += DXbonus # déplacement horizontal
         self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height) # déplacement du pattern de l'alien
         self.__window.after(20, self.deplacementAlienBonus) # boucle de déplacement en continu
-        dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoAlien sur les aliens encore en déplacement
+        dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height, 1] # Update du dicoAlien sur les aliens encore en déplacement
 
     def createurTirBonus(self):
         global freqTirAlienBonus
