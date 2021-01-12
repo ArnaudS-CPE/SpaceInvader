@@ -14,11 +14,12 @@
 # • Laisser parler votre imagination et n’hésitez pas à demander conseil à vos ainés qui auraient perdu un temps précieux à jouer à ce jeu ! 
 # 
 #
-# On peut tirer sur nos propres murs, c'est un problème ?
 # le tir en rafale à nerf ? ( apparition d'un bool pour les alliés )peut etre accessible en cheat code ?
 # ligne 126, si on met moins que 1001 ms de delai, les aliens semblent pas etre correctement supprimés
 # les jaunes se décalent petit à petit vers la droite
 # pas de focus sur la page d'un nouveau niveau (que sur windows?)
+# pour la rafale, mettre deux bind dans le main, un sur Key (pour right et left), l'autre sur KeyRelease (pour espace), scinder la fct
+# evenement en deux pour que le bind en appelle une chacun. 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
 from random import choice
@@ -396,7 +397,6 @@ class AlienBonus:
             self.__canv.delete(self.__pattern)
             if dicoAlien == {} : # condition de sortie gagnante du jeu 
                 self.__canv.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Partie gagnée")
-                dicoMur = {}
             return
 
         # condition touche alien / vaisseau
