@@ -138,7 +138,7 @@ class Alien:
         self.__posX += DX # déplacement horizontal
         self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height) # déplacement du pattern de l'alien
         self.__window.after(20, self.deplacementAlien) # boucle de déplacement en continu
-        dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoAlien sur les aliens encore en déplacement
+        dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height, 0] # Update du dicoAlien sur les aliens encore en déplacement
 
     def createurTir(self):
         # arrête les tirs des aliens si le vaisseau est collisionné avec un alien
@@ -350,7 +350,7 @@ class AlienBonus:
         self.__window = window
         self.__ennemi = vaisseau
         self.__pattern = self.__canv.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, width=2, outline='red', fill='orange')
-        dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height]
+        dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height, 1]
         self.deplacementAlienBonus()
 
     def setPerdu(self):
