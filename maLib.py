@@ -40,7 +40,8 @@ DX = 4 # déplacement des aliens en horizontale
 DXbonus = 8 # déplacement de l'alien bonus en horizontale
 DY=50 # déplacement des aliens en verticale
 DXVaisseau = 8 # déplacement du vaisseau en horizontale
-freqTirAlien = 2000 # 
+freqTirAlien = 2000 #
+lengthTir = 6
 
 dicoAlien = {} # contient les objets aliens et leurs informations quand ils sont en vie
 dicoMur = {} # contient les murs non détruits
@@ -225,19 +226,20 @@ class Vaisseau:
        
 
 class Tir:
-    global dicoAlien
+    global dicoAlien, lengthTir
 
     def __init__(self, posXTir, posYTir, direction, vaisseau, canevas, window):
         self.__posX = posXTir
         self.__posY = posYTir
+        self.__length = lengthTir
         self.__direction = direction
         self.__cible = vaisseau
         self.__canv = canevas
         self.__window = window
         if direction == 0 :
-            self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir-6, fill = 'black', outline='yellow')
+            self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir-self.__length, fill = 'black', outline='yellow')
         else:
-            self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir+6, fill = 'black', outline='red')
+            self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir+self.__length, fill = 'black', outline='red')
         self.movementTir() # Initie le déplacement du tir
             
     def movementTir(self):
@@ -259,8 +261,8 @@ class Tir:
                 self.__canv.delete(self.__pattern)
                 return
             if True: # bouce infinie de déplacement
-                self.__posY -= 6
-                self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-6)
+                self.__posY -= self.__length
+                self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-self.__length)
                 self.__window.after(20,self.movementTir)
         else:
             if self.__posX >= self.__cible.getPosX() and self.__posX <= self.__cible.getPosX()+self.__cible.getWidth() and self.__posY >= self.__cible.getPosY() and self.__posY <= self.__cible.getPosY()+self.__cible.getHeight():
@@ -285,8 +287,8 @@ class Tir:
                 self.__canv.delete(self.__pattern)
                 return
             elif True:
-                self.__posY += 6
-                self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY+6)
+                self.__posY += self.__length
+                self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY+self.__length)
                 self.__window.after(20,self.movementTir)
 
 
