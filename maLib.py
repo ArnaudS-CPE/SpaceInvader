@@ -252,7 +252,7 @@ class Tir:
                     return
             for key in dicoMur.keys():
                 # gère la collision du tir et d'un mur
-                if self.__posX > dicoMur.get(key)[0] and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2] and self.__posY > dicoMur.get(key)[1] and self.__posY < dicoMur.get(key)[1]+dicoMur.get(key)[3]:
+                if self.__posX > dicoMur.get(key)[0]-2 and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2]+2 and self.__posY > dicoMur.get(key)[1] and self.__posY < dicoMur.get(key)[1]+dicoMur.get(key)[3]:
                     self.__canv.delete(self.__pattern)
                     dicoMur.pop(key)
                     return
@@ -278,7 +278,7 @@ class Tir:
                     del self.__cible
                     return
             for key in dicoMur.keys():
-                if self.__posX > dicoMur.get(key)[0] and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2] and self.__posY > dicoMur.get(key)[1] and self.__posY < dicoMur.get(key)[1]+dicoMur.get(key)[3]:
+                if self.__posX > dicoMur.get(key)[0]-2 and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2]+2 and self.__posY > dicoMur.get(key)[1] and self.__posY < dicoMur.get(key)[1]+dicoMur.get(key)[3]:
                     self.__canv.delete(self.__pattern)
                     dicoMur.pop(key)
                     return
@@ -313,3 +313,18 @@ class Mur: # protections pour le vaisseau
             del self
             return
         self.__window.after(10, self.verifMur)
+
+
+class AlienBonus:
+    def __init__(self, width, height, posX, posY, canevas, window):
+        self.__posX = posX
+        self.__posY = posY
+        self.__height = 50
+        self.__width = 100
+        self.__vies = 3
+        self.__score = 0
+        self.__canv = canevas
+        self.__window = window
+        self.__winning = True
+        self.__pattern = self.__canv.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, 
+            width=2, outline='red', fill='white')
