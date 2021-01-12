@@ -322,6 +322,7 @@ class AlienBonus:
         self.__posY = posY
         self.__width = width
         self.__height = height
+        self.__perdu = False
         self.__vies = 3
         self.__canv = canevas
         self.__window = window
@@ -329,6 +330,10 @@ class AlienBonus:
         self.__pattern = self.__canv.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, width=2, outline='red', fill='orange')
         dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height]
         self.deplacementAlienBonus()
+
+    def setPerdu(self):
+        self.__perdu = True
+        return self.__perdu
 
     def deplacementAlienBonus(self) :
         global DXbonus
