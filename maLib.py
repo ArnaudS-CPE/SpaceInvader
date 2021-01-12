@@ -2,10 +2,7 @@
 # début du projet le 15/12/2020
 # Objectif : réalisation d'un space invaders sous Tkinter
 # TODO : lien du sujet du tp : https://prod.e-campus.cpe.fr/pluginfile.php/53617/mod_resource/content/1/TP3.pdf
-# afficher les vies du vaisseau
-# Faire apparaitre un ennemi bonus et gerer son état
-# introduire les scores transformer les aliens soit en formes simples soit en images
-# barre du menu
+# transformer les aliens soit en formes simples soit en images
 # BONUS :
 # • Augmenter la vitesse des Aliens lorsqu’ils sont moins nombreux.
 # • Gérer le passage de la soucoupe
@@ -19,16 +16,8 @@
 #
 # On peut tirer sur nos propres murs, c'est un problème ?
 # le tir en rafale à nerf ? ( apparition d'un bool pour les alliés )peut etre accessible en cheat code ?
-# messagebox pour rejouer apres avoir gagner ou système de niveaux
-# La forme du tir convient ?
-# partie gagné à réaliser en upgradant de niveau
-# mettre une image de fond du canvas
-# travailler l'affichage de la fenetre j'ai un ami qui à fait exactement le même affichage, j'irait surement lui demander.
 # ligne 126, si on met moins que 1001 ms de delai, les aliens semblent pas etre correctement supprimés
-# qu'est ce qui se passe si on est touché après avoir gagné la partie ? un tir qu'il reste ( mettre un self.__perdu dans les tirs ?)
-# variable pour le pas de tir à mettre en place 
 # les jaunes se décalent petit à petit vers la droite
-# vérifier les lignes 138-140 
 # pas de focus sur la page d'un nouveau niveau (que sur windows?)
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
@@ -224,7 +213,7 @@ class Vaisseau:
         global DXVaisseau
 
         touche = event.keysym
-        print(touche) # affiche la touche du clavier, facultatif
+        # print(touche) # affiche la touche du clavier, facultatif
         if touche == 'Right': # déplacement à droite
             if self.__posX+self.__width >= LargeurCanevas: # condition d'arret
                 pass
