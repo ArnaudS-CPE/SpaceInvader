@@ -29,7 +29,7 @@ HauteurCanevas = 700
 
 DX = 4 # déplacement des aliens en horizontale
 DXbonus = 8 # déplacement de l'alien bonus en horizontale
-DY=20 # déplacement des aliens en verticale
+DY=10 # déplacement des aliens en verticale
 DXVaisseau = 8 # déplacement du vaisseau en horizontale
 freqTirAlien = 2000
 freqTirAlienBonus = 1000 #
@@ -127,16 +127,15 @@ class Alien:
                 key.setPerdu() # pour chaque alien, met son attribut __perdu à 'True'
 
         # condition touche alien / mur
-
-        # listeSuppression = []
-        # for key in dicoMur.keys():
-        #     if (self.__posX+self.__width > dicoMur.get(key)[0] and self.__posX+self.__width < dicoMur.get(key)[0]+dicoMur.get(key)[2] and self.__posY+self.__height > dicoMur.get(key)[1] and self.__posY+self.__height < dicoMur.get(key)[1]+dicoMur.get(key)[3] or 
-        #         self.__posX > dicoMur.get(key)[0] and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2] and self.__posY+self.__height > dicoMur.get(key)[1] and self.__posY+self.__height < dicoMur.get(key)[1]+dicoMur.get(key)[3]):
-        #         listeSuppression.append(key)
-        # print(listeSuppression)
-        # for i in range(len(listeSuppression)-1):
-        #     dicoMur.pop(listeSuppression[i])
-        #     del listeSuppression[i]
+        listeSuppression = []
+        for key in dicoMur.keys():
+            if (self.__posX+self.__width > dicoMur.get(key)[0] and self.__posX+self.__width < dicoMur.get(key)[0]+dicoMur.get(key)[2] and self.__posY+self.__height > dicoMur.get(key)[1] and self.__posY+self.__height < dicoMur.get(key)[1]+dicoMur.get(key)[3] or 
+                self.__posX > dicoMur.get(key)[0] and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2] and self.__posY+self.__height > dicoMur.get(key)[1] and self.__posY+self.__height < dicoMur.get(key)[1]+dicoMur.get(key)[3]):
+                listeSuppression.append(key)
+        #print(listeSuppression)
+        for i in range(len(listeSuppression)-1):
+            dicoMur.pop(listeSuppression[i])
+            del listeSuppression[i]
             
 
         self.__posX += DX # déplacement horizontal
@@ -236,17 +235,7 @@ class Vaisseau:
             del tir # supprime le tir
 
         if touche == "v":
-            listCheat.append('v')
-        if (touche == "i") and (listCheat ==['v']):
-            listCheat.append('i')
-        elif ((touche == "i") and listCheat !=['v']):
-            listCheat.pop()
-        if (touche == "e") and (listCheat == ['v', 'i']):
-            listCheat.append('e')
-            self.setVies(3)
-        elif ((touche == "e") and (listCheat ==['v'])):
-            listCheat.pop()
-            listCheat.pop()
+            self.setVies(self.__vies+1)
 
         
 
