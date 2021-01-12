@@ -26,7 +26,9 @@
 # travailler l'affichage de la fenetre j'ai un ami qui à fait exactement le même affichage, j'irait surement lui demander.
 # ligne 126, si on met moins que 1001 ms de delai, les aliens semblent pas etre correctement supprimés
 # qu'est ce qui se passe si on est touché après avoir gagné la partie ? un tir qu'il reste ( mettre un self.__perdu dans les tirs ?)
-
+# variable pour le pas de tir à mettre en place 
+# les jaunes se décalent petit à petit vers la droite
+# vérifier les lignes 138-140 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
 from random import choice
