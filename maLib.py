@@ -124,7 +124,6 @@ class Alien:
             self.__canv.delete(self.__pattern)
             if dicoAlien == {} : # condition de sortie gagnante du jeu 
                 self.__canv.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Partie gagnée")
-                dicoMur = {}
             return
 
         # condition touche alien / vaisseau
@@ -134,6 +133,19 @@ class Alien:
             self.__ennemi.setWinning()
             for key in dicoAlien.keys():
                 key.setPerdu() # pour chaque alien, met son attribut __perdu à 'True'
+
+        # condition touche alien / mur
+
+        # listeSuppression = []
+        # for key in dicoMur.keys():
+        #     if (self.__posX+self.__width > dicoMur.get(key)[0] and self.__posX+self.__width < dicoMur.get(key)[0]+dicoMur.get(key)[2] and self.__posY+self.__height > dicoMur.get(key)[1] and self.__posY+self.__height < dicoMur.get(key)[1]+dicoMur.get(key)[3] or 
+        #         self.__posX > dicoMur.get(key)[0] and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2] and self.__posY+self.__height > dicoMur.get(key)[1] and self.__posY+self.__height < dicoMur.get(key)[1]+dicoMur.get(key)[3]):
+        #         listeSuppression.append(key)
+        # print(listeSuppression)
+        # for i in range(len(listeSuppression)-1):
+        #     dicoMur.pop(listeSuppression[i])
+        #     del listeSuppression[i]
+            
 
         self.__posX += DX # déplacement horizontal
         self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height) # déplacement du pattern de l'alien
