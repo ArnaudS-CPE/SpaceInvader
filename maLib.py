@@ -246,10 +246,7 @@ class Vaisseau:
             listCheat.pop()
             listCheat.pop()
 
-        #if len(listCheat) == 3:
-        #    if listCheat == ['v', 'i', 'e']:
-        #        self.setVies(3)
-       
+        
 
 class Tir:
     global dicoAlien, lengthTir, vieAlien
