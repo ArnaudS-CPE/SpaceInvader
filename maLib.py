@@ -288,14 +288,15 @@ class Tir:
 
 class Mur: # protections pour le vaisseau
 
-    def __init__(self, width, posX, posY, canevas, window):
+    def __init__(self, width, height, posX, posY, canevas, window):
         self.__width = width
+        self.__height = height
         self.__posX = posX
         self.__posY = posY
         self.__canv = canevas
         self.__window = window
-        self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+30, width=3, outline='black', fill='grey25')
-        dicoMur[self] = [self.__posX, self.__posY, self.__width, 30]
+        self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=2, outline='black', fill='grey25')
+        dicoMur[self] = [self.__posX, self.__posY, self.__width, self.__height]
         self.verifMur()        
         
     def getPattern(self):
