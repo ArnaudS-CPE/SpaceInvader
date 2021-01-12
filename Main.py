@@ -68,14 +68,22 @@ def level1():
 
     alien1.createurTir()
 
+    alienbonus = mL.AlienBonus(70, 70, 100, 100, canevas, mw)
+
     checkWinning(vaisseau, mw)
 
-    mur1 = mL.Mur(80, 60, 500, canevas, mw)
-    mur2 = mL.Mur(80, 200, 500, canevas, mw)
-    mur3 = mL.Mur(80, 340, 500, canevas, mw)
-    mur4 = mL.Mur(80, 480, 500, canevas, mw)
-    mur5 = mL.Mur(80, 620, 500, canevas, mw)
-    mur6 = mL.Mur(80, 760, 500, canevas, mw)
+    for k in range(8) :
+        for l in range(3) :
+            mur1 = mL.Mur(20, 20, 75+k*20, 500+l*20, canevas, mw)
+
+    for k in range(8) :
+        for l in range(3) :
+            mur2 = mL.Mur(20, 20, 375+k*20, 500+l*20, canevas, mw)
+
+    for k in range(8) :
+        for l in range(3) :
+            mur3 = mL.Mur(20, 20, 665+k*20, 500+l*20, canevas, mw)
+
 
     mw.mainloop()
 

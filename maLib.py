@@ -26,7 +26,6 @@
 # travailler l'affichage de la fenetre j'ai un ami qui à fait exactement le même affichage, j'irait surement lui demander.
 # ligne 126, si on met moins que 1001 ms de delai, les aliens semblent pas etre correctement supprimés
 # qu'est ce qui se passe si on est touché après avoir gagné la partie ? un tir qu'il reste ( mettre un self.__perdu dans les tirs ?)
-# mettre les petits murs qui se détruissent au fur et a mesure comme sur la photo dans les attendus du tp 
 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
@@ -258,15 +257,16 @@ class Tir:
 
 class Mur: # protections pour le vaisseau
 
-    def __init__(self, width, posX, posY, canevas, window):
+    def __init__(self, width, height, posX, posY, canevas, window):
         self.__width = width
+        self.__height = height
         self.__posX = posX
         self.__posY = posY
         self.__canv = canevas
         self.__window = window
-        self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+30, width=3, outline='black', fill='grey25')
-        dicoMur[self] = [self.__posX, self.__posY, self.__width, 30]
-        self.verifMur()        
+        self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=2, outline='black', fill='grey25')
+        dicoMur[self] = [self.__posX, self.__posY, self.__width, self.__height]
+        self.verifMur()
         
     def getPattern(self):
         return self.__pattern
@@ -277,3 +277,18 @@ class Mur: # protections pour le vaisseau
             del self
             return
         self.__window.after(10, self.verifMur)
+
+
+class AlienBonus:
+
+    def __init__(self, width, height, posX, posY, canevas, window):
+        self.__width = width
+        self.__height = height
+        self.__posX = posX
+        self.__posY = posY
+        self.__vies = 3
+        self.__canv = canevas
+        self.__window = window
+        self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=2, outline='red', fill='orange')
+        
+        
