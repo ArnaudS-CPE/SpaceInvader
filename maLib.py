@@ -49,12 +49,13 @@ dicoMur = {} # contient les murs non détruits
 class Alien:
     global LargeurCanevas, HauteurCanevas, dicoAlien
 
-    def __init__(self, posX, posY, height, width, vaisseau, canevas, window):
+    def __init__(self, posX, posY, height, width, frequence, vaisseau, canevas, window):
         self.__height = height
         self.__width = width
         self.__posX = posX
         self.__posY = posY
         self.__perdu = False # initie un bool qui dit que le joueur n'est pas en train de perdre
+        self.__frequence = frequence
         self.__canv = canevas
         self.__window = window
         self.__ennemi = vaisseau
@@ -131,8 +132,6 @@ class Alien:
         dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoAlien sur les aliens encore en déplacement
 
     def createurTir(self):
-        global freqTirAlien
-
         # arrête les tirs des aliens si le vaisseau est collisionné avec un alien
         if self.__perdu == True:
             return # fct à vérifier 
@@ -146,7 +145,7 @@ class Alien:
         posYTir =   alienTireur.__posY + alienTireur.__height
         tir = Tir(posXTir, posYTir, 1, self.__ennemi, self.__canv, self.__window) # instancie un objet de type Tir
         del tir # supprime le tir
-        self.__canv.after(freqTirAlien, self.createurTir)
+        self.__canv.after(self.__frequence, self.createurTir)
 
 
 class Vaisseau:
@@ -195,8 +194,8 @@ class Vaisseau:
     def setWinning(self):
         self.__winning = False
 
-    def setScore(self):
-        self.__score += 100
+    def setScore(self, points):
+        self.__score += points
 
     def evenement(self, event): # gestion des évènements claviers pour le déplacement et le tir du vaisseau
         global DXVaisseau
@@ -248,7 +247,7 @@ class Tir:
                 if self.__posX > dicoAlien.get(key)[0] and self.__posX < dicoAlien.get(key)[0]+dicoAlien.get(key)[2] and self.__posY > dicoAlien.get(key)[1] and self.__posY < dicoAlien.get(key)[1]+dicoAlien.get(key)[3]:
                     self.__canv.delete(self.__pattern)
                     dicoAlien.pop(key)
-                    self.__cible.setScore()
+                    self.__cible.setScore(100)
                     return
             for key in dicoMur.keys():
                 # gère la collision du tir et d'un mur
