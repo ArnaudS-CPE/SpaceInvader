@@ -1,5 +1,6 @@
 # BURLOT Alexandre, SIBENALER Arnaud
 # début du projet le 15/12/2020
+# Lien GitHub : https://github.com/ArnaudS-CPE/SpaceInvader 
 # Objectif : réalisation d'un space invaders sous Tkinter
 # TODO : lien du sujet du tp : https://prod.e-campus.cpe.fr/pluginfile.php/53617/mod_resource/content/1/TP3.pdf
 # transformer les aliens soit en formes simples soit en images
