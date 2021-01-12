@@ -40,7 +40,8 @@ DX = 4 # déplacement des aliens en horizontale
 DXbonus = 8 # déplacement de l'alien bonus en horizontale
 DY=50 # déplacement des aliens en verticale
 DXVaisseau = 8 # déplacement du vaisseau en horizontale
-freqTirAlien = 2000 #
+freqTirAlien = 2000
+freqTirAlienBonus = 1000 #
 lengthTir = 6
 
 dicoAlien = {} # contient les objets aliens et leurs informations quand ils sont en vie
@@ -250,6 +251,12 @@ class Tir:
                     dicoAlien.pop(key)
                     self.__cible.setScore(100)
                     return
+            for key in dicoAlien.keys():
+                # gère la collision du tir et de l'alien bonus
+                if self.__posX > dicoAlien.get(key)[0] and self.__posX < dicoAlien.get(key)[0]+dicoAlien.get(key)[2] and self.__posY > dicoAlien.get(key)[1] and self.__posY < dicoAlien.get(key)[1]+dicoAlien.get(key)[3]:
+                    self.__canv.delete(self.__pattern)
+                    dicoAlien.pop(key)
+                    self.__cible.setScore(500)
             for key in dicoMur.keys():
                 # gère la collision du tir et d'un mur
                 if self.__posX > dicoMur.get(key)[0]-2 and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2]+2 and self.__posY > dicoMur.get(key)[1] and self.__posY < dicoMur.get(key)[1]+dicoMur.get(key)[3]:
@@ -316,6 +323,8 @@ class Mur: # protections pour le vaisseau
 
 
 class AlienBonus:
+    global LargeurCanevas, HauteurCanevas, dicoAlien
+
     def __init__(self, posX, posY, width, height, vaisseau, canevas, window):
         self.__posX = posX
         self.__posY = posY
@@ -372,7 +381,7 @@ class AlienBonus:
         dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height] # Update du dicoAlien sur les aliens encore en déplacement
 
     def createurTirBonus(self):
-        global freqTirAlien
+        global freqTirAlienBonus
 
         # arrête les tirs des aliens si le vaisseau est collisionné avec un alien
         if self.__perdu == True:
@@ -387,4 +396,4 @@ class AlienBonus:
         posYTir =   alienTireur.__posY + alienTireur.__height
         tir = Tir(posXTir, posYTir, 1, self.__ennemi, self.__canv, self.__window) # instancie un objet de type Tir
         del tir # supprime le tir
-        self.__canv.after(freqTirAlien, self.createurTir)
+        self.__canv.after(freqTirAlienBonus, self.createurTirBonus)
