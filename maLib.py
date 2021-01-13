@@ -174,6 +174,7 @@ class Vaisseau:
         self.__width = 100
         self.__vies = 3
         self.__score = 0
+        self.__rafale = False
         self.__canv = canevas
         self.__window = window
         self.__winning = True
@@ -206,12 +207,18 @@ class Vaisseau:
 
     def getWinning(self):
         return self.__winning
+        
+    def getRafale(self):
+        return self.__rafale
     
     def setWinning(self):
         self.__winning = False
 
     def setScore(self, points):
         self.__score += points
+    
+    def resetRafale(self):
+        self.__rafale = False
 
     def evenement(self, event): # gestion des évènements claviers pour le déplacement et le tir du vaisseau
         global DXVaisseau
@@ -233,14 +240,23 @@ class Vaisseau:
                 self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
         
         if touche == "space": # déclenche le tir du vaisseau
-            posXTir = self.__posX + (self.__width//2)
+            posXTir = self.__posX + (self.__width//2) # trouve le centre du vaisseau pour lancer le tir
             posYTir = self.__posY
-            if len(dicoTir) < maxTirs:
+            if len(dicoTir) < maxTirs: # limite le nombre de tirs alliés sur le canvas
                 tir = Tir(posXTir, posYTir, 0, self, self.__canv, self.__window) # instancie un objet de type Tir
                 del tir # supprime le tir
 
-        if touche == "bar":
+        # Cheat codes
+        if touche == "bar": # ajoute une vie si on appuie sur Shift-Alt-l
             self.setVies(self.__vies+1)
+        
+        if touche == 'Oacute': # tir en rafale si on appuie sur Shift-Alt-m, à effectuer seulement quand aucun tir alié n'est présent
+            for key in dicoTir.keys():
+                self.__window.delete(key.getPattern())
+                dicoTir.pop(key)
+                del key
+            self.__rafale = True
+            self.__window.after(10000, self.resetRafale)
 
         
 
@@ -256,7 +272,8 @@ class Tir:
         self.__canv = canevas
         self.__window = window
         if direction == 0 :
-            dicoTir[self] = True
+            if not self.__cible.getRafale():
+                dicoTir[self] = True
             self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir-self.__length, fill = 'black', outline='yellow')
         else:
             self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir+self.__length, fill = 'black', outline='red')
@@ -270,7 +287,8 @@ class Tir:
                     # cas des aliens normaux
                     if dicoAlien.get(key)[4] == 0 :
                         self.__canv.delete(self.__pattern)
-                        dicoTir.pop(self)
+                        if not self.__cible.getRafale():
+                            dicoTir.pop(self)
                         dicoAlien.pop(key)
                         self.__cible.setScore(100)
                         return
@@ -278,25 +296,29 @@ class Tir:
                     if dicoAlien.get(key)[4] == 1 :
                         if len(vieAlien) == 1 :
                             self.__canv.delete(self.__pattern)
-                            dicoTir.pop(self)
+                            if not self.__cible.getRafale():
+                                dicoTir.pop(self)
                             dicoAlien.pop(key)
                             self.__cible.setScore(500)
                             return
                         else :
                             self.__canv.delete(self.__pattern)
-                            dicoTir.pop(self)
+                            if not self.__cible.getRafale():
+                                dicoTir.pop(self)
                             vieAlien.pop()
                             return
             for key in dicoMur.keys():
                 # gère la collision du tir et d'un mur
                 if self.__posX > dicoMur.get(key)[0]-2 and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2]+2 and self.__posY > dicoMur.get(key)[1] and self.__posY < dicoMur.get(key)[1]+dicoMur.get(key)[3]:
                     self.__canv.delete(self.__pattern)
-                    dicoTir.pop(self)
+                    if not self.__cible.getRafale():
+                        dicoTir.pop(self)
                     dicoMur.pop(key)
                     return
             if self.__posY <=0: # collision avec le haut du canvas
                 self.__canv.delete(self.__pattern)
-                dicoTir.pop(self)
+                if not self.__cible.getRafale():
+                    dicoTir.pop(self)
                 return
             if True: # bouce infinie de déplacement
                 self.__posY -= self.__length
