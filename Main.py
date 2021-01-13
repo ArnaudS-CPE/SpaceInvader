@@ -116,16 +116,22 @@ def checkWinning(niveau,vaisseau,window):
     if mL.dicoAlien == {}:
         boiteMessage = messagebox.showinfo(title='Continuer à jouer ?', message='Passage au niveau supérieur')
         if frequence > 1001:
-            frequence -= 200
+            frequence -= 250
+        mL.DX = abs(mL.DX) + 1
+        mL.DY = abs(mL.DY) + 2
         scoreactuel = vaisseau.getScore()
         window.destroy()
         mL.dicoMur = {}
+        mL.dicoTir = {}
         jeu(scoreactuel,niveau+1) #commande pour continuer le jeu
     if not vaisseau.getWinning():
         boiteMessage = messagebox.askyesno("Perdu", "Vous avez perdu !\n Voulez vous recommencer ?")
         if boiteMessage == 1:
             window.destroy()
             mL.dicoMur = {}
+            mL.dicoTir = {}
+            mL.DX = 4
+            mL.DY = 10
             jeu(0,1) #commande pour recommencer
         elif boiteMessage == 0:
             window.destroy() # commande pour quitter

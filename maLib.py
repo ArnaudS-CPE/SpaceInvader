@@ -20,7 +20,9 @@
 # les jaunes se décalent petit à petit vers la droite
 # pas de focus sur la page d'un nouveau niveau (que sur windows?)
 # pour la rafale, mettre deux bind dans le main, un sur Key (pour right et left), l'autre sur KeyRelease (pour espace), scinder la fct
-# evenement en deux pour que le bind en appelle une chacun. 
+# evenement en deux pour que le bind en appelle une chacun.
+# changer vieAlien en int()
+# au niveau 6, lors de la deuxième apparition du boss et probablement pour tous les autres, il n'a qu'une vie 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
 from random import choice
@@ -32,9 +34,10 @@ DX = 4 # déplacement des aliens en horizontale
 DXbonus = 8 # déplacement de l'alien bonus en horizontale
 DY=10 # déplacement des aliens en verticale
 DXVaisseau = 8 # déplacement du vaisseau en horizontale
-freqTirAlien = 2000
-freqTirAlienBonus = 1000 #
-lengthTir = 6
+freqTirAlienBonus = 1000 # fréquence de tir de l'alien bonus
+lengthTir = 6 # taille d'un tir
+maxTirs = 5 # nb de tirs alliés max possible sur le terrain
+
 
 # on définie le nombre de vies de l'alien bonus
 vieAlien = []
@@ -43,8 +46,8 @@ for i in range(10) :
 
 dicoAlien = {} # contient les objets aliens et leurs informations quand ils sont en vie
 dicoMur = {} # contient les murs non détruits
+dicoTir = {} # contient les tirs alliés seulement
 
-listCheat = []
 
 
 class Alien:
@@ -162,7 +165,7 @@ class Alien:
 
 
 class Vaisseau:
-    global LargeurCanevas, HauteurCanevas, listCheat
+    global LargeurCanevas, HauteurCanevas
 
     def __init__(self, posX, posY, canevas, window):
         self.__posX = posX
@@ -232,8 +235,9 @@ class Vaisseau:
         if touche == "space": # déclenche le tir du vaisseau
             posXTir = self.__posX + (self.__width//2)
             posYTir = self.__posY
-            tir = Tir(posXTir, posYTir, 0, self, self.__canv, self.__window) # instancie un objet de type Tir
-            del tir # supprime le tir
+            if len(dicoTir) < maxTirs:
+                tir = Tir(posXTir, posYTir, 0, self, self.__canv, self.__window) # instancie un objet de type Tir
+                del tir # supprime le tir
 
         if touche == "bar":
             self.setVies(self.__vies+1)
@@ -252,6 +256,7 @@ class Tir:
         self.__canv = canevas
         self.__window = window
         if direction == 0 :
+            dicoTir[self] = True
             self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir-self.__length, fill = 'black', outline='yellow')
         else:
             self.__pattern = self.__canv.create_rectangle(posXTir,posYTir,posXTir,posYTir+self.__length, fill = 'black', outline='red')
@@ -265,6 +270,7 @@ class Tir:
                     # cas des aliens normaux
                     if dicoAlien.get(key)[4] == 0 :
                         self.__canv.delete(self.__pattern)
+                        dicoTir.pop(self)
                         dicoAlien.pop(key)
                         self.__cible.setScore(100)
                         return
@@ -272,21 +278,25 @@ class Tir:
                     if dicoAlien.get(key)[4] == 1 :
                         if len(vieAlien) == 1 :
                             self.__canv.delete(self.__pattern)
+                            dicoTir.pop(self)
                             dicoAlien.pop(key)
                             self.__cible.setScore(500)
                             return
                         else :
                             self.__canv.delete(self.__pattern)
+                            dicoTir.pop(self)
                             vieAlien.pop()
                             return
             for key in dicoMur.keys():
                 # gère la collision du tir et d'un mur
                 if self.__posX > dicoMur.get(key)[0]-2 and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2]+2 and self.__posY > dicoMur.get(key)[1] and self.__posY < dicoMur.get(key)[1]+dicoMur.get(key)[3]:
                     self.__canv.delete(self.__pattern)
+                    dicoTir.pop(self)
                     dicoMur.pop(key)
                     return
             if self.__posY <=0: # collision avec le haut du canvas
                 self.__canv.delete(self.__pattern)
+                dicoTir.pop(self)
                 return
             if True: # bouce infinie de déplacement
                 self.__posY -= self.__length
