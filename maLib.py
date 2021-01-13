@@ -214,7 +214,7 @@ class Vaisseau:
         global DXVaisseau
 
         touche = event.keysym
-        # print(touche) # affiche la touche du clavier, facultatif
+        print(touche) # affiche la touche du clavier, facultatif
         if touche == 'Right': # déplacement à droite
             if self.__posX+self.__width >= LargeurCanevas: # condition d'arret
                 pass
@@ -235,7 +235,7 @@ class Vaisseau:
             tir = Tir(posXTir, posYTir, 0, self, self.__canv, self.__window) # instancie un objet de type Tir
             del tir # supprime le tir
 
-        if touche == "v":
+        if touche == "bar":
             self.setVies(self.__vies+1)
 
         
