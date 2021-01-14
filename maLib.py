@@ -23,6 +23,7 @@
 # evenement en deux pour que le bind en appelle une chacun.
 # changer vieAlien en int()
 # au niveau 6, lors de la deuxième apparition du boss et probablement pour tous les autres, il n'a qu'une vie revoir lignes 42-45
+# Faire trois tirs par trois tirs pour l'alienbonus 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
 from random import choice
