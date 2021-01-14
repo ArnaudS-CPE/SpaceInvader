@@ -22,7 +22,7 @@
 # pour la rafale, mettre deux bind dans le main, un sur Key (pour right et left), l'autre sur KeyRelease (pour espace), scinder la fct
 # evenement en deux pour que le bind en appelle une chacun.
 # changer vieAlien en int()
-# au niveau 6, lors de la deuxième apparition du boss et probablement pour tous les autres, il n'a qu'une vie 
+# au niveau 6, lors de la deuxième apparition du boss et probablement pour tous les autres, il n'a qu'une vie revoir lignes 42-45
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
 from random import choice
@@ -36,10 +36,10 @@ DY=10 # déplacement des aliens en verticale
 DXVaisseau = 8 # déplacement du vaisseau en horizontale
 freqTirAlienBonus = 1000 # fréquence de tir de l'alien bonus
 lengthTir = 6 # taille d'un tir
-maxTirs = 5 # nb de tirs alliés max possible sur le terrain
+maxTirs = 7 # nb de tirs alliés max possible sur le terrain
 
 
-# on définie le nombre de vies de l'alien bonus
+# on définie le nombre de vies de l'alien bonus, à revoir !
 vieAlien = []
 for i in range(10) :
     vieAlien.append(1)
@@ -224,7 +224,7 @@ class Vaisseau:
         global DXVaisseau
 
         touche = event.keysym
-        print(touche) # affiche la touche du clavier, facultatif
+        # print(touche) # affiche la touche du clavier, facultatif
         if touche == 'Right': # déplacement à droite
             if self.__posX+self.__width >= LargeurCanevas: # condition d'arret
                 pass
