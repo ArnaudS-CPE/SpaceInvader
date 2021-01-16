@@ -22,7 +22,6 @@
 # pour la rafale, mettre deux bind dans le main, un sur Key (pour right et left), l'autre sur KeyRelease (pour espace), scinder la fct
 # evenement en deux pour que le bind en appelle une chacun.
 # changer vieAlien en int()
-# au niveau 6, lors de la deuxième apparition du boss et probablement pour tous les autres, il n'a qu'une vie revoir lignes 42-45
 # Faire trois tirs par trois tirs pour l'alienbonus 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
@@ -40,7 +39,7 @@ lengthTir = 6 # taille d'un tir
 maxTirs = 7 # nb de tirs alliés max possible sur le terrain
 
 
-# on définie le nombre de vies de l'alien bonus, à revoir !
+# on définie le nombre de vies de l'alien bonus
 vieAlien = []
 for i in range(10) :
     vieAlien.append(1)
@@ -301,6 +300,9 @@ class Tir:
                                 dicoTir.pop(self)
                             dicoAlien.pop(key)
                             self.__cible.setScore(500)
+                            for j in range(9) :
+                                vieAlien.append(1)
+                            print(vieAlien)
                             return
                         else :
                             self.__canv.delete(self.__pattern)
@@ -386,7 +388,7 @@ class AlienBonus:
         self.__width = width
         self.__height = height
         self.__perdu = False
-        self.__vies = 3
+        self.__vies = 10
         self.__canv = canevas
         self.__window = window
         self.__ennemi = vaisseau
