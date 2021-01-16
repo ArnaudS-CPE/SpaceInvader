@@ -15,15 +15,11 @@
 # • Laisser parler votre imagination et n’hésitez pas à demander conseil à vos ainés qui auraient perdu un temps précieux à jouer à ce jeu ! 
 # 
 #
-# le tir en rafale à nerf ? ( apparition d'un bool pour les alliés )peut etre accessible en cheat code ?
 # ligne 126, si on met moins que 1001 ms de delai, les aliens semblent pas etre correctement supprimés
 # les jaunes se décalent petit à petit vers la droite
 # pas de focus sur la page d'un nouveau niveau (que sur windows?)
-# pour la rafale, mettre deux bind dans le main, un sur Key (pour right et left), l'autre sur KeyRelease (pour espace), scinder la fct
-# evenement en deux pour que le bind en appelle une chacun.
-# changer vieAlien en int()
-# au niveau 6, lors de la deuxième apparition du boss et probablement pour tous les autres, il n'a qu'une vie revoir lignes 42-45
-# Faire trois tirs par trois tirs pour l'alienbonus 
+# Faire trois tirs par trois tirs pour l'alienbonus
+# Quand le joueur à perdu est ce qu'on afficherait pas plutot une image de game-over et le joueur utilise les boutons sur les cotés ? 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
 from random import choice
@@ -41,9 +37,7 @@ maxTirs = 7 # nb de tirs alliés max possible sur le terrain
 
 
 # on définie le nombre de vies de l'alien bonus, à revoir !
-vieAlien = []
-for i in range(10) :
-    vieAlien.append(1)
+
 
 dicoAlien = {} # contient les objets aliens et leurs informations quand ils sont en vie
 dicoMur = {} # contient les murs non détruits
@@ -168,12 +162,12 @@ class Alien:
 class Vaisseau:
     global LargeurCanevas, HauteurCanevas
 
-    def __init__(self, posX, posY, canevas, window):
+    def __init__(self, posX, posY, vies, canevas, window):
         self.__posX = posX
         self.__posY = posY
         self.__height = 50
         self.__width = 100
-        self.__vies = 3
+        self.__vies = vies
         self.__score = 0
         self.__rafale = False
         self.__canv = canevas
@@ -262,7 +256,7 @@ class Vaisseau:
         
 
 class Tir:
-    global dicoAlien, lengthTir, vieAlien
+    global dicoAlien, lengthTir
 
     def __init__(self, posXTir, posYTir, direction, vaisseau, canevas, window):
         self.__posX = posXTir
@@ -295,19 +289,20 @@ class Tir:
                         return
                     # cas de l'alien bonus
                     if dicoAlien.get(key)[4] == 1 :
-                        if len(vieAlien) == 1 :
-                            self.__canv.delete(self.__pattern)
-                            if not self.__cible.getRafale():
-                                dicoTir.pop(self)
-                            dicoAlien.pop(key)
-                            self.__cible.setScore(500)
-                            return
-                        else :
-                            self.__canv.delete(self.__pattern)
-                            if not self.__cible.getRafale():
-                                dicoTir.pop(self)
-                            vieAlien.pop()
-                            return
+                        for key in dicoAlien.keys():
+                            if key.getVies() == 1 :
+                                self.__canv.delete(self.__pattern)
+                                if not self.__cible.getRafale():
+                                    dicoTir.pop(self)
+                                dicoAlien.pop(key)
+                                self.__cible.setScore(500)
+                                return
+                            else :
+                                self.__canv.delete(self.__pattern)
+                                if not self.__cible.getRafale():
+                                    dicoTir.pop(self)
+                                key.setVies(key.getVies()-1)
+                                return
             for key in dicoMur.keys():
                 # gère la collision du tir et d'un mur
                 if self.__posX > dicoMur.get(key)[0]-2 and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2]+2 and self.__posY > dicoMur.get(key)[1] and self.__posY < dicoMur.get(key)[1]+dicoMur.get(key)[3]:
@@ -386,7 +381,7 @@ class AlienBonus:
         self.__width = width
         self.__height = height
         self.__perdu = False
-        self.__vies = 3
+        self.__vies = 10
         self.__canv = canevas
         self.__window = window
         self.__ennemi = vaisseau
@@ -394,9 +389,15 @@ class AlienBonus:
         dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height, 1]
         self.deplacementAlienBonus()
 
+    def getVies(self):
+        return self.__vies
+
     def setPerdu(self):
         self.__perdu = True
         return self.__perdu
+
+    def setVies(self, newVies):
+        self.__vies = newVies
 
     def deplacementAlienBonus(self) :
         global DXbonus

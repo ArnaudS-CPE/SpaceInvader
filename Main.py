@@ -21,9 +21,10 @@ from tkinter import Tk, Label, Button, Canvas, messagebox, LabelFrame, PhotoImag
 import maLib as mL
 
 frequence = 3001
+viesVaisseau = 3
 
 def jeu(scoreactuel, niveau):
-    global frequence
+    global frequence, viesVaisseau
 
     # création de la fenetre
     mw = Tk()
@@ -50,13 +51,13 @@ def jeu(scoreactuel, niveau):
     newGameButton.grid(row=2, column=3, sticky='N', padx=5)
     canevas.grid(row=1, column=0, rowspan=3, columnspan=3, padx=5)
 
-    vaisseau = mL.Vaisseau(10,600, canevas, mw)
+    vaisseau = mL.Vaisseau(10, 600, viesVaisseau, canevas, mw)
     vaisseau.setScore(scoreactuel)
     canevas.focus_set()
     canevas.bind('<Key>',vaisseau.evenement)
 
     if niveau%3 != 0:
-        # ligne 1 d'aliens 
+        # crée la ligne 1 d'aliens 
         alien1 = mL.Alien(10, 10, 50, 50, frequence, vaisseau, canevas, mw)
         alien2 = mL.Alien(110, 10, 50, 50, frequence, vaisseau, canevas, mw)
         alien3 = mL.Alien(210, 10, 50, 50, frequence, vaisseau, canevas, mw)
@@ -65,7 +66,7 @@ def jeu(scoreactuel, niveau):
         alien6 = mL.Alien(510, 10, 50, 50, frequence, vaisseau, canevas, mw)
         alien7 = mL.Alien(610, 10, 50, 50, frequence, vaisseau, canevas, mw)
 
-        # ligne 2 d'aliens
+        # crée la ligne 2 d'aliens 
         alien8 = mL.Alien(10, 100, 50, 50, frequence, vaisseau, canevas, mw)
         alien9 = mL.Alien(110, 100, 50, 50, frequence, vaisseau, canevas, mw)
         alien10 = mL.Alien(210, 100, 50, 50, frequence, vaisseau, canevas, mw)
@@ -74,7 +75,7 @@ def jeu(scoreactuel, niveau):
         alien13 = mL.Alien(510, 100, 50, 50, frequence, vaisseau, canevas, mw)
         alien14 = mL.Alien(610, 100, 50, 50, frequence, vaisseau, canevas, mw)
 
-        # ligne 2 d'aliens
+        # crée la ligne 3 d'aliens 
         alien15 = mL.Alien(10, 190, 50, 50, frequence, vaisseau, canevas, mw)
         alien16 = mL.Alien(110, 190, 50, 50, frequence, vaisseau, canevas, mw)
         alien17 = mL.Alien(210, 190, 50, 50, frequence, vaisseau, canevas, mw)
@@ -83,7 +84,7 @@ def jeu(scoreactuel, niveau):
         alien20 = mL.Alien(510, 190, 50, 50, frequence, vaisseau, canevas, mw)
         alien21 = mL.Alien(610, 190, 50, 50, frequence, vaisseau, canevas, mw)
 
-        alien1.createurTir()
+        alien1.createurTir() # initie le tir des aliens
 
     else:
         alienbonus = mL.AlienBonus(100, 100, 200, 80, vaisseau, canevas, mw)
@@ -112,11 +113,11 @@ def jeu(scoreactuel, niveau):
 
     
 def checkWinning(niveau,vaisseau,window):
-    global frequence
+    global frequence, viesVaisseau
     if mL.dicoAlien == {}:
-        boiteMessage = messagebox.showinfo(title='Continuer à jouer ?', message='Passage au niveau supérieur')
         if frequence > 1001:
             frequence -= 250
+        viesVaisseau = vaisseau.getVies()
         mL.DX = abs(mL.DX) + 1
         mL.DY = abs(mL.DY) + 2
         scoreactuel = vaisseau.getScore()
