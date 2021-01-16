@@ -20,6 +20,10 @@
 # pas de focus sur la page d'un nouveau niveau (que sur windows?)
 # Faire trois tirs par trois tirs pour l'alienbonus
 # Quand le joueur à perdu est ce qu'on afficherait pas plutot une image de game-over et le joueur utilise les boutons sur les cotés ? 
+# pour la rafale, mettre deux bind dans le main, un sur Key (pour right et left), l'autre sur KeyRelease (pour espace), scinder la fct
+# evenement en deux pour que le bind en appelle une chacun.
+# changer vieAlien en int()
+# Faire trois tirs par trois tirs pour l'alienbonus 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
 from random import choice
