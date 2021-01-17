@@ -61,7 +61,7 @@ class Alien:
         self.__frequence = frequence
         self.__canv = canevas
         self.__window = window
-        self.__ennemi = vaisseau
+        self.__ennemi = vaisseau # défini la cible de l'alien --> le vaisseau
         if self.__posY == 10: # met la ligne du fond en jaune
             self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=3, outline='white', fill='yellow')
         elif self.__posY == 100: # met la ligne du milieu en bleu
@@ -71,6 +71,8 @@ class Alien:
 
         dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height, 0] # stocke dans un dictionnaire les positions en temps réel des aliens
         self.deplacementAlien() # initie le déplacement de l'alien
+        del self # supprime l'objet alien
+
 
     # Getters
     def getPosX(self):
@@ -99,8 +101,7 @@ class Alien:
         if self.__perdu: # si la valeur de l'attibut perdu est à 'True', tous les aliens se stoppent
             return
 
-        # touche le bord droit du canvas
-        if self.__posX+self.__width+DX > LargeurCanevas :
+        if self.__posX+self.__width+DX > LargeurCanevas : # touche le bord droit du canvas
             for key in dicoAlien.keys():
                 key.__posY += DY # déplacement vertical vers le bas
                 if key != self: # si ce n'est pas l'alien qui vient de vérifier la condition, se déplace vers la gauche 
@@ -116,9 +117,7 @@ class Alien:
         
         # vérifie la présence de l'alien dans le dictionnaire / si il est touché, pour le supprimer du canevas
         if self not in dicoAlien:
-            self.__canv.delete(self.__pattern)
-            if dicoAlien == {} : # condition de sortie gagnante du jeu 
-                self.__canv.create_text(240, 160, fill = "red", font = "Courier 20 bold", text = "Partie gagnée")
+            self.__canv.delete(self.__pattern) # supprime la forme de l'alien
             return
 
         # condition touche alien / vaisseau
@@ -180,6 +179,7 @@ class Vaisseau:
         self.__pattern = self.__canv.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, 
             width=2, outline='red', fill='white')
     
+    # Getters
     def getPosX(self):
         return self.__posX
     
@@ -210,6 +210,7 @@ class Vaisseau:
     def getRafale(self):
         return self.__rafale
     
+    # Setter
     def setWinning(self):
         self.__winning = False
 
@@ -392,10 +393,13 @@ class AlienBonus:
         self.__pattern = self.__canv.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, width=2, outline='red', fill='orange')
         dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height, 1]
         self.deplacementAlienBonus()
+        del self
 
+    # Getter
     def getVies(self):
         return self.__vies
-
+    
+    # Setters
     def setPerdu(self):
         self.__perdu = True
         return self.__perdu
