@@ -1,23 +1,9 @@
 # BURLOT Alexandre, SIBENALER Arnaud
 # début du projet le 15/12/2020
 # Objectif : réalisation d'un space invaders sous Tkinter
-# TODO : lien du sujet du tp : https://prod.e-campus.cpe.fr/pluginfile.php/53617/mod_resource/content/1/TP3.pdf
-# afficher les vies du vaisseau
-# Faire apparaitre un ennemi bonus et gerer son état
-# introduire les scores transformer les aliens soit en formes simples soit en images
-# barre du menu
-# BONUS :
-# • Augmenter la vitesse des Aliens lorsqu’ils sont moins nombreux.
-# • Gérer le passage de la soucoupe
-# • Créer plusieurs niveaux à votre jeu
-# • Ajouter une image de fond (différente pour chaque niveau)
-# • Gestion des meilleurs scores (avec inscription dans un fichier texte)
-# • Permettre à l’utilisateur de changer les touches de contrôle
-# • Mettre des cheat codes afin de gagner des vies supplémentaires
-# • Laisser parler votre imagination et n’hésitez pas à demander conseil à vos ainés qui auraient perdu un temps précieux à jouer à ce jeu !
-# 
-# 
-# ne met pas de msg pour recommencer, siplement une image "game-over" en fond et il appuiera sur le bouton "New Game"
+# Sujet du tp : https://prod.e-campus.cpe.fr/pluginfile.php/53617/mod_resource/content/1/TP3.pdf
+# Lien du répertoire Git : https://github.com/ArnaudS-CPE/SpaceInvader
+
 
 
 from tkinter import Tk, Label, Button, Canvas, messagebox, LabelFrame, PhotoImage, Menu

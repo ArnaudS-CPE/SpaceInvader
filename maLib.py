@@ -1,30 +1,10 @@
 # BURLOT Alexandre, SIBENALER Arnaud
 # début du projet le 15/12/2020
-# Lien GitHub : https://github.com/ArnaudS-CPE/SpaceInvader 
 # Objectif : réalisation d'un space invaders sous Tkinter
-# TODO : lien du sujet du tp : https://prod.e-campus.cpe.fr/pluginfile.php/53617/mod_resource/content/1/TP3.pdf
-# transformer les aliens soit en formes simples soit en images
-# BONUS :
-# • Augmenter la vitesse des Aliens lorsqu’ils sont moins nombreux.
-# • Gérer le passage de la soucoupe
-# • Créer plusieurs niveaux à votre jeu
-# • Ajouter une image de fond (différente pour chaque niveau)
-# • Gestion des meilleurs scores (avec inscription dans un fichier texte)
-# • Permettre à l’utilisateur de changer les touches de contrôle
-# • Mettre des cheat codes afin de gagner des vies supplémentaires
-# • Laisser parler votre imagination et n’hésitez pas à demander conseil à vos ainés qui auraient perdu un temps précieux à jouer à ce jeu ! 
-# 
-#
-# ligne 126, si on met moins que 1001 ms de delai, les aliens semblent pas etre correctement supprimés
-# les jaunes se décalent petit à petit vers la droite
-# pas de focus sur la page d'un nouveau niveau (que sur windows?)
-# Faire trois tirs par trois tirs pour l'alienbonus
-# Quand le joueur à perdu est ce qu'on afficherait pas plutot une image de game-over et le joueur utilise les boutons sur les cotés ? 
-# pour la rafale, mettre deux bind dans le main, un sur Key (pour right et left), l'autre sur KeyRelease (pour espace), scinder la fct
-# evenement en deux pour que le bind en appelle une chacun.
-# changer vieAlien en int()
-# Faire trois tirs par trois tirs pour l'alienbonus
-# command rafale à revoir 
+# Sujet du tp : https://prod.e-campus.cpe.fr/pluginfile.php/53617/mod_resource/content/1/TP3.pdf
+# Lien du répertoire Git : https://github.com/ArnaudS-CPE/SpaceInvader
+
+
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
 from random import choice
