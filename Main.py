@@ -40,6 +40,8 @@ def jeu(scoreactuel, niveau):
     canevas = Canvas(mw, width = mL.LargeurCanevas, height = mL.HauteurCanevas, bg = 'grey')
     if niveau == 0: # image pour l'écran d'acceuil
         backgroundPicture = PhotoImage(file = 'accueil_space_invader.gif')
+    elif niveau == -1: # image pour l'écran de game over
+        backgroundPicture = PhotoImage(file = 'gameover.gif')
     else: # image pour les niveau de jeu
         backgroundPicture = PhotoImage(file = 'Earth.gif')
     canevas.create_image(453,353, image=backgroundPicture)
@@ -60,6 +62,8 @@ def jeu(scoreactuel, niveau):
 
     if niveau == 0: # niveau 0 (acceuil)
         canevas.create_text(450, 100, fill = "black", font = "Courier 15 bold", text = "Appuyez sur 'New Game' pour démarer la partie !")
+    elif niveau == -1: # niveau -1 (game over)
+        canevas.create_text(450, 100, fill = "black", font = "Courier 15 bold", text = "Appuyez sur 'New Game' pour recommencer une partie !")
     else: # niveaux >= 1
         # instanciation de l'objet vaisseau
         vaisseau = mL.Vaisseau(10, 600, viesVaisseau, canevas, mw)
@@ -142,21 +146,23 @@ def checkWinning(niveau,vaisseau,window): # vérifie si le joueur ne perd pas
         mL.dicoTir = {}
         jeu(scoreactuel,niveau+1) #commande pour continuer le jeu
     if not vaisseau.getWinning(): # si le joueur à perdu
-        # proposition de relancer
-        boiteMessage = messagebox.askyesno("Perdu", "Vous avez perdu !\n Voulez vous recommencer ?")
-        if boiteMessage == 1:
-            window.destroy()
+        window.destroy()
+        jeu(0, -1)
+         # proposition de relancer
+        #boiteMessage = messagebox.askyesno("Perdu", "Vous avez perdu !\n Voulez vous recommencer ?")
+        #if boiteMessage == 1:
+        #    window.destroy()
 
             # réinitialise les dictionnaires 
-            mL.dicoMur = {}
-            mL.dicoTir = {}
+        #    mL.dicoMur = {}
+        #    mL.dicoTir = {}
 
             # réinitialisation des déplacements aliens
-            mL.DX = 4
-            mL.DY = 10
-            jeu(0,1) #commande pour recommencer au niveau 1
-        elif boiteMessage == 0:
-            window.destroy() # commande pour quitter
+        #    mL.DX = 4
+        #    mL.DY = 10
+        #    jeu(0,1) #commande pour recommencer au niveau 1
+        #elif boiteMessage == 0:
+        #    window.destroy() # commande pour quitter
     window.after(200, lambda:[checkWinning(niveau,vaisseau, window)]) # vérifie toute les 200 ms
 
 def checkScore(score,vaisseau,window):
