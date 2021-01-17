@@ -20,7 +20,7 @@
 # ne met pas de msg pour recommencer, siplement une image "game-over" en fond et il appuiera sur le bouton "New Game"
 
 
-from tkinter import Tk, Label, Button, Canvas, messagebox, LabelFrame, PhotoImage
+from tkinter import Tk, Label, Button, Canvas, messagebox, LabelFrame, PhotoImage, Menu
 import maLib as mL
 
 frequence = 3001 # fréquence de tir des aliens
@@ -58,6 +58,17 @@ def jeu(scoreactuel, niveau):
     quit.grid(row=3, column=3, sticky='N', padx=5)
     newGameButton.grid(row=2, column=3, sticky='N', padx=5)
     canevas.grid(row=1, column=0, rowspan=3, columnspan=3, padx=5)
+
+    # création d'un menu
+    menuBar = Menu(mw)
+    menuJeu = Menu(menuBar, tearoff = 0)
+    menuJeu.add_command(label = "New Game", command = lambda:[mw.destroy(),jeu(0,1)])
+    menuJeu.add_command(label = "Quit", command = mw.destroy)
+    menuBar.add_cascade(label = "Jeu", menu = menuJeu)
+    menuaide = Menu(menuBar,tearoff = 0)
+    menuaide.add_command(label = "A propos",command = Apropos)
+    menuBar.add_cascade(label = "Aide", menu = menuaide)
+    mw.config(menu = menuBar)
 
     if niveau == 0: # niveau 0 (acceuil)
         canevas.create_text(450, 100, fill = "black", font = "Courier 15 bold", text = "Appuyez sur 'New Game' pour démarer la partie !")
@@ -128,7 +139,6 @@ def jeu(scoreactuel, niveau):
     mw.mainloop() # boucle principale de la fenêtre Tkinter
 
 
-    
 def checkWinning(niveau,vaisseau,window): # vérifie si le joueur ne perd pas
     global frequence, viesVaisseau
     
@@ -172,5 +182,7 @@ def checkNiveau(niveau,niveauLabel,window):
         niveauLabel['text'] = 'Niveau : '+str(niveau) # change le texte du label avec la nouvelle valeur
     window.after(100, lambda:[checkNiveau(niveau,niveauLabel,window)]) # vérifie toute les 100 ms
 
+def Apropos():
+    messagebox.showinfo("A propos","Space Invaders\n\nAlexandre BURLOT\nArnaud SIBENALER")
 
 jeu(0,0) # Lance le jeu au niveau 0 (acceuil)
