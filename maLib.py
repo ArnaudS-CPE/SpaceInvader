@@ -9,6 +9,7 @@
 from tkinter import Label, Canvas, Button, Tk, messagebox
 from random import choice
 
+
 LargeurCanevas = 900
 HauteurCanevas = 700
 
@@ -23,7 +24,6 @@ maxTirs = 7 # nb de tirs alliés max possible sur le terrain
 dicoAlien = {} # contient les objets aliens et leurs informations quand ils sont en vie
 dicoMur = {} # contient les murs non détruits
 dicoTir = {} # contient les tirs alliés seulement
-
 
 
 class Alien:
@@ -72,7 +72,7 @@ class Alien:
         self.__perdu = True
         return self.__perdu
     
-    def deplacementAlien(self) :
+    def deplacementAlien(self):
         global DX
 
         if self.__perdu: # si la valeur de l'attibut perdu est à 'True', tous les aliens se stoppent

@@ -9,6 +9,7 @@
 from tkinter import Tk, Label, Button, Canvas, messagebox, LabelFrame, PhotoImage, Menu
 import maLib as mL
 
+
 frequence = 3001 # fréquence de tir des aliens
 viesVaisseau = 3 # vies du vaisseau
 
