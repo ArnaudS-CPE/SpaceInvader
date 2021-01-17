@@ -29,7 +29,6 @@ viesVaisseau = 3 # vies du vaisseau
 def jeu(scoreactuel, niveau):
     global frequence, viesVaisseau
 
-    
     # création de la fenetre
     mw = Tk()
     mw.geometry(str(mL.LargeurCanevas+100) + "x" + str(mL.HauteurCanevas))
@@ -41,14 +40,14 @@ def jeu(scoreactuel, niveau):
     if niveau == 0: # image pour l'écran d'acceuil
         backgroundPicture = PhotoImage(file = 'accueil_space_invader.gif')
     elif niveau == -1: # image pour l'écran de game over
-        backgroundPicture = PhotoImage(file = 'gameover.gif')
+        backgroundPicture = PhotoImage(file = 'Game-over.gif')
     else: # image pour les niveau de jeu
         backgroundPicture = PhotoImage(file = 'Earth.gif')
     canevas.create_image(453,353, image=backgroundPicture)
     
     quit = Button(mw, text = "Quit", command = mw.destroy)
     newGameButton = Button(mw, text = 'New Game', command = lambda:[mw.destroy(),jeu(0,1)])
-    score = Label(mw, text = 'Score :'+str(scoreactuel))
+    score = Label(mw, text = 'Score : '+str(scoreactuel))
     vies = Label(mw, text = 'Vies : 3')
     niveauLabel = Label(mw, text = 'Niveau : '+str(niveau))
 
@@ -63,7 +62,7 @@ def jeu(scoreactuel, niveau):
     if niveau == 0: # niveau 0 (acceuil)
         canevas.create_text(450, 100, fill = "black", font = "Courier 15 bold", text = "Appuyez sur 'New Game' pour démarer la partie !")
     elif niveau == -1: # niveau -1 (game over)
-        canevas.create_text(450, 100, fill = "black", font = "Courier 15 bold", text = "Appuyez sur 'New Game' pour recommencer une partie !")
+        canevas.create_text(450, 100, fill = "white", font = "Courier 15 bold", text = "Appuyez sur 'New Game' pour recommencer une partie !")
     else: # niveaux >= 1
         # instanciation de l'objet vaisseau
         vaisseau = mL.Vaisseau(10, 600, viesVaisseau, canevas, mw)

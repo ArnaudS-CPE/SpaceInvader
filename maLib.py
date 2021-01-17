@@ -23,7 +23,8 @@
 # pour la rafale, mettre deux bind dans le main, un sur Key (pour right et left), l'autre sur KeyRelease (pour espace), scinder la fct
 # evenement en deux pour que le bind en appelle une chacun.
 # changer vieAlien en int()
-# Faire trois tirs par trois tirs pour l'alienbonus 
+# Faire trois tirs par trois tirs pour l'alienbonus
+# command rafale à revoir 
 
 from tkinter import Label, Canvas, Button, Tk, messagebox
 from random import choice
@@ -38,10 +39,6 @@ DXVaisseau = 8 # déplacement du vaisseau en horizontale
 freqTirAlienBonus = 1000 # fréquence de tir de l'alien bonus
 lengthTir = 6 # taille d'un tir
 maxTirs = 7 # nb de tirs alliés max possible sur le terrain
-
-
-# on définie le nombre de vies de l'alien bonus, à revoir !
-
 
 dicoAlien = {} # contient les objets aliens et leurs informations quand ils sont en vie
 dicoMur = {} # contient les murs non détruits
@@ -124,22 +121,20 @@ class Alien:
         if (self.__posX+self.__width > self.__ennemi.getPosX() and self.__posX+self.__width < self.__ennemi.getPosX()+self.__ennemi.getWidth() and self.__posY+self.__height > self.__ennemi.getPosY() and self.__posY+self.__height < self.__ennemi.getPosY()+self.__ennemi.getHeight() or 
             self.__posX > self.__ennemi.getPosX() and self.__posX < self.__ennemi.getPosX()+self.__ennemi.getWidth() and self.__posY+self.__height > self.__ennemi.getPosY() and self.__posY+self.__height < self.__ennemi.getPosY()+self.__ennemi.getHeight()):
             self.__canv.create_text(LargeurCanevas//2, HauteurCanevas//2, fill = "red", font = "Courier 20 bold", text = "Fin de partie")
-            self.__ennemi.setWinning()
+            self.__ennemi.setWinning() # change la valeur à False
             for key in dicoAlien.keys():
                 key.setPerdu() # pour chaque alien, met son attribut __perdu à 'True'
 
         # condition touche alien / mur
-        listeSuppression = []
+        listeSuppression = [] # stockage des murs à supprimer
         for key in dicoMur.keys():
             if (self.__posX+self.__width > dicoMur.get(key)[0] and self.__posX+self.__width < dicoMur.get(key)[0]+dicoMur.get(key)[2] and self.__posY+self.__height > dicoMur.get(key)[1] and self.__posY+self.__height < dicoMur.get(key)[1]+dicoMur.get(key)[3] or 
                 self.__posX > dicoMur.get(key)[0] and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2] and self.__posY+self.__height > dicoMur.get(key)[1] and self.__posY+self.__height < dicoMur.get(key)[1]+dicoMur.get(key)[3]):
-                listeSuppression.append(key)
-        #print(listeSuppression)
+                listeSuppression.append(key) # ajoute les murs collisionnés avec le bas droite ou gauche des aliens 
         for i in range(len(listeSuppression)-1):
-            dicoMur.pop(listeSuppression[i])
-            del listeSuppression[i]
+            dicoMur.pop(listeSuppression[i]) # supprime les dictinnaires 
             
-
+        # déplacement normal des aliens
         self.__posX += DX # déplacement horizontal
         self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height) # déplacement du pattern de l'alien
         self.__window.after(20, self.deplacementAlien) # boucle de déplacement en continu
@@ -154,7 +149,7 @@ class Alien:
         if dicoAlien == {} :
             return
         
-        alienTireur = choice(list(dicoAlien.keys()))
+        alienTireur = choice(list(dicoAlien.keys())) # choisi un alien en random dans le dictionnaire des aliens
         posXTir = alienTireur.__posX + (alienTireur.__width//2)
         posYTir =   alienTireur.__posY + alienTireur.__height
         tir = Tir(posXTir, posYTir, 1, self.__ennemi, self.__canv, self.__window) # instancie un objet de type Tir
@@ -210,7 +205,7 @@ class Vaisseau:
     def getRafale(self):
         return self.__rafale
     
-    # Setter
+    # Setters
     def setWinning(self):
         self.__winning = False
 
@@ -235,7 +230,7 @@ class Vaisseau:
         if touche == 'Left': # déplacement à gauche
             if self.__posX <= 4: # condition d'arret
                 pass
-            else:
+            else: # deplace le vaisseau
                 self.__posX -= DXVaisseau
                 self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height)
         
@@ -250,9 +245,9 @@ class Vaisseau:
         if touche == "bar": # ajoute une vie si on appuie sur Shift-Alt-l
             self.setVies(self.__vies+1)
         
-        if touche == 'Oacute': # tir en rafale si on appuie sur Shift-Alt-m, à effectuer seulement quand aucun tir alié n'est présent
-            for key in dicoTir.keys():
-                self.__window.delete(key.getPattern())
+        if touche == 'Oacute': # tir en rafale si on appuie sur Shift-Alt-m, à effectuer seulement quand aucun tir allié n'est présent
+            for key in dicoTir.keys(): # supprime tous les tirs dans le dictionnaire 
+                self.__canv.delete(key.getPattern())
                 dicoTir.pop(key)
                 del key
             self.__rafale = True
