@@ -164,7 +164,7 @@ class Vaisseau:
         self.__posX = posX
         self.__posY = posY
         self.__height = 50
-        self.__width = 100
+        self.__width = 80
         self.__vies = vies
         self.__score = 0
         self.__rafale = False
@@ -246,15 +246,10 @@ class Vaisseau:
             self.setVies(self.__vies+1)
         
         if touche == 'Oacute': # tir en rafale si on appuie sur Shift-Alt-m, à effectuer seulement quand aucun tir allié n'est présent
-            for key in dicoTir.keys(): # supprime tous les tirs dans le dictionnaire 
-                self.__canv.delete(key.getPattern())
-                dicoTir.pop(key)
-                del key
             self.__rafale = True
             self.__window.after(10000, self.resetRafale)
 
         
-
 class Tir:
     global dicoAlien, lengthTir
 
@@ -280,31 +275,32 @@ class Tir:
                 # gère la collision du tir et d'un alien
                 if self.__posX > dicoAlien.get(key)[0] and self.__posX < dicoAlien.get(key)[0]+dicoAlien.get(key)[2] and self.__posY > dicoAlien.get(key)[1] and self.__posY < dicoAlien.get(key)[1]+dicoAlien.get(key)[3]:
                     # cas des aliens normaux
-                    if dicoAlien.get(key)[4] == 0 :
+                    if dicoAlien.get(key)[4] == 0 : # pas un alien bonus
                         self.__canv.delete(self.__pattern)
-                        if not self.__cible.getRafale():
+                        if not self.__cible.getRafale(): 
                             dicoTir.pop(self)
                         dicoAlien.pop(key)
                         self.__cible.setScore(100)
                         return
+
                     # cas de l'alien bonus
-                    if dicoAlien.get(key)[4] == 1 :
+                    if dicoAlien.get(key)[4] == 1 : # c'est un alien bonus
                         for key in dicoAlien.keys():
-                            if key.getVies() == 1 :
+                            if key.getVies() == 1 : # dernière vie
                                 self.__canv.delete(self.__pattern)
                                 if not self.__cible.getRafale():
                                     dicoTir.pop(self)
                                 dicoAlien.pop(key)
                                 self.__cible.setScore(500)
                                 return
-                            else :
+                            else : # enlève une vie
                                 self.__canv.delete(self.__pattern)
                                 if not self.__cible.getRafale():
                                     dicoTir.pop(self)
                                 key.setVies(key.getVies()-1)
                                 return
-            for key in dicoMur.keys():
-                # gère la collision du tir et d'un mur
+
+            for key in dicoMur.keys(): # gère la collision du tir allié et d'un mur, supprime les deux
                 if self.__posX > dicoMur.get(key)[0]-2 and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2]+2 and self.__posY > dicoMur.get(key)[1] and self.__posY < dicoMur.get(key)[1]+dicoMur.get(key)[3]:
                     self.__canv.delete(self.__pattern)
                     if not self.__cible.getRafale():
@@ -320,29 +316,29 @@ class Tir:
                 self.__posY -= self.__length
                 self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY-self.__length)
                 self.__window.after(20,self.movementTir)
-        else:
+        else: # direction du haut vers le bas, tir des aliens 
+            # collision avec le vaisseau
             if self.__posX >= self.__cible.getPosX() and self.__posX <= self.__cible.getPosX()+self.__cible.getWidth() and self.__posY >= self.__cible.getPosY() and self.__posY <= self.__cible.getPosY()+self.__cible.getHeight():
-                if self.__cible.getVies() != 1:
+                if self.__cible.getVies() != 1: # enlève une vie
                     self.__canv.delete(self.__pattern)
                     self.__cible.setVies(self.__cible.getVies()-1)
                     return
-                else:
-                    print("éliminé")
+                else: # vaisseau éliminé, fin de la partie
                     self.__canv.delete(self.__pattern)
                     self.__canv.delete(self.__cible.getPattern())
                     self.__cible.setWinning()
                     self.__cible.setVies(self.__cible.getVies()-1)
                     del self.__cible
                     return
-            for key in dicoMur.keys():
+            for key in dicoMur.keys(): # collision entre tir alien et les murs, supprime les deux
                 if self.__posX > dicoMur.get(key)[0]-2 and self.__posX < dicoMur.get(key)[0]+dicoMur.get(key)[2]+2 and self.__posY > dicoMur.get(key)[1] and self.__posY < dicoMur.get(key)[1]+dicoMur.get(key)[3]:
                     self.__canv.delete(self.__pattern)
                     dicoMur.pop(key)
                     return
-            if self.__posY >= HauteurCanevas:
+            if self.__posY >= HauteurCanevas: # si le tir touche le bas du canvas, supprime le tir
                 self.__canv.delete(self.__pattern)
                 return
-            elif True:
+            elif True: # bouce infinie de déplacement
                 self.__posY += self.__length
                 self.__canv.coords(self.__pattern, self.__posX, self.__posY, self.__posX, self.__posY+self.__length)
                 self.__window.after(20,self.movementTir)
@@ -359,13 +355,15 @@ class Mur: # protections pour le vaisseau
         self.__window = window
         self.__pattern = self.__canv.create_rectangle(posX, posY, posX+width, posY+height, width=2, outline='black', fill='grey25')
         dicoMur[self] = [self.__posX, self.__posY, self.__width, self.__height]
-        self.verifMur()        
-        
+        self.verifMur() # initie la vérification du mur  
+    
+    # Getter
     def getPattern(self):
         return self.__pattern
     
+
     def verifMur(self):
-        if self not in dicoMur :
+        if self not in dicoMur : # supprime le mur si il n'est plus dans le dicoMur
             self.__canv.delete(self.__pattern)
             del self
             return
@@ -388,7 +386,7 @@ class AlienBonus:
         self.__pattern = self.__canv.create_rectangle(self.__posX, self.__posY, self.__posX+self.__width, self.__posY+self.__height, width=2, outline='red', fill='orange')
         dicoAlien[self] = [self.__posX, self.__posY, self.__width, self.__height, 1]
         self.deplacementAlienBonus()
-        del self
+        del self # supprime celui-ci si il ne se déplace plus
 
     # Getter
     def getVies(self):
@@ -402,8 +400,10 @@ class AlienBonus:
     def setVies(self, newVies):
         self.__vies = newVies
 
+
     def deplacementAlienBonus(self) :
         global DXbonus
+
         # touche le bord droit du canvas
         if self.__posX+self.__width+DXbonus > LargeurCanevas :
             for key in dicoAlien.keys():
@@ -450,9 +450,8 @@ class AlienBonus:
         if dicoAlien == {} :
             return
         
-        alienTireur = choice(list(dicoAlien.keys()))
-        posXTir = alienTireur.__posX + (alienTireur.__width//2)
-        posYTir =   alienTireur.__posY + alienTireur.__height
+        posXTir = self.__posX + (self.__width//2) # trouve l'emplacement de création du tir
+        posYTir =   self.__posY + self.__height
         tir = Tir(posXTir, posYTir, 1, self.__ennemi, self.__canv, self.__window) # instancie un objet de type Tir
         del tir # supprime le tir
         self.__canv.after(freqTirAlienBonus, self.createurTirBonus)
