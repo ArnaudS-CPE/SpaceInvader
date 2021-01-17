@@ -154,7 +154,7 @@ def checkWinning(niveau,vaisseau,window): # vérifie si le joueur ne perd pas
         mL.DY = 10
         frequence = 3001
         window.destroy()
-        jeu(0, -1)
+        jeu(vaisseau.getScore(), -1)
     window.after(200, lambda:[checkWinning(niveau,vaisseau, window)]) # vérifie toute les 200 ms
 
 def checkScore(score,vaisseau,window):
