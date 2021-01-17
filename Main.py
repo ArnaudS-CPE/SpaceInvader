@@ -35,7 +35,7 @@ def jeu(scoreactuel, niveau):
     mw.geometry(str(mL.LargeurCanevas+100) + "x" + str(mL.HauteurCanevas))
     mw.title("Space Invader")
     mw.minsize(mL.HauteurCanevas, mL.LargeurCanevas)
-
+    
     # création des widgets
     canevas = Canvas(mw, width = mL.LargeurCanevas, height = mL.HauteurCanevas, bg = 'grey')
     if niveau == 0: # image pour l'écran d'acceuil
@@ -146,23 +146,15 @@ def checkWinning(niveau,vaisseau,window): # vérifie si le joueur ne perd pas
         mL.dicoTir = {}
         jeu(scoreactuel,niveau+1) #commande pour continuer le jeu
     if not vaisseau.getWinning(): # si le joueur à perdu
+        # réinitialisation des dictionnaires
+        mL.dicoAlien = {}
+        mL.dicoMur = {}
+        # réinitialisation des aliens
+        mL.DX = 4
+        mL.DY = 10
+        frequence = 3001
         window.destroy()
         jeu(0, -1)
-         # proposition de relancer
-        #boiteMessage = messagebox.askyesno("Perdu", "Vous avez perdu !\n Voulez vous recommencer ?")
-        #if boiteMessage == 1:
-        #    window.destroy()
-
-            # réinitialise les dictionnaires 
-        #    mL.dicoMur = {}
-        #    mL.dicoTir = {}
-
-            # réinitialisation des déplacements aliens
-        #    mL.DX = 4
-        #    mL.DY = 10
-        #    jeu(0,1) #commande pour recommencer au niveau 1
-        #elif boiteMessage == 0:
-        #    window.destroy() # commande pour quitter
     window.after(200, lambda:[checkWinning(niveau,vaisseau, window)]) # vérifie toute les 200 ms
 
 def checkScore(score,vaisseau,window):
