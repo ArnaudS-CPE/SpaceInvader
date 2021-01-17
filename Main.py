@@ -61,7 +61,7 @@ def jeu(scoreactuel, niveau):
     canevas.grid(row=1, column=0, rowspan=3, columnspan=3, padx=5)
 
     if niveau == 0:
-        fff
+        canevas.create_text(450, 100, fill = "black", font = "Courier 15 bold", text = "Appuyez sur 'New Game' pour démarer la partie !")
     else:
         # instanciation de l'objet vaisseau
         vaisseau = mL.Vaisseau(10, 600, viesVaisseau, canevas, mw)
@@ -123,7 +123,7 @@ def jeu(scoreactuel, niveau):
             for l in range(2) :
                 mur3 = mL.Mur(20, 20, 665+k*20, 520+l*20, canevas, mw)
 
-        mw.mainloop() # boucle principale de la fenêtre Tkinter
+    mw.mainloop() # boucle principale de la fenêtre Tkinter
 
 
     
@@ -177,4 +177,4 @@ def checkNiveau(niveau,niveauLabel,window):
     window.after(100, lambda:[checkNiveau(niveau,niveauLabel,window)]) # vérifie toute les 100 ms
 
 
-jeu(0,1) # Lance le jeu au niveau 1
+jeu(0,0) # Lance le jeu au niveau 0 (acceuil)
