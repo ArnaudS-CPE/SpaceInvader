@@ -17,8 +17,6 @@
 # • Laisser parler votre imagination et n’hésitez pas à demander conseil à vos ainés qui auraient perdu un temps précieux à jouer à ce jeu !
 # 
 # 
-# 
-# Mettre un écran d'accueil qui montrerai une image de space invader quand jeu(0,0)
 # ne met pas de msg pour recommencer, siplement une image "game-over" en fond et il appuiera sur le bouton "New Game"
 
 
@@ -40,9 +38,9 @@ def jeu(scoreactuel, niveau):
 
     # création des widgets
     canevas = Canvas(mw, width = mL.LargeurCanevas, height = mL.HauteurCanevas, bg = 'grey')
-    if niveau == 0:
+    if niveau == 0: # image pour l'écran d'acceuil
         backgroundPicture = PhotoImage(file = 'accueil_space_invader.gif')
-    else:
+    else: # image pour les niveau de jeu
         backgroundPicture = PhotoImage(file = 'Earth.gif')
     canevas.create_image(453,353, image=backgroundPicture)
     
@@ -60,9 +58,9 @@ def jeu(scoreactuel, niveau):
     newGameButton.grid(row=2, column=3, sticky='N', padx=5)
     canevas.grid(row=1, column=0, rowspan=3, columnspan=3, padx=5)
 
-    if niveau == 0:
+    if niveau == 0: # niveau 0 (acceuil)
         canevas.create_text(450, 100, fill = "black", font = "Courier 15 bold", text = "Appuyez sur 'New Game' pour démarer la partie !")
-    else:
+    else: # niveaux >= 1
         # instanciation de l'objet vaisseau
         vaisseau = mL.Vaisseau(10, 600, viesVaisseau, canevas, mw)
         vaisseau.setScore(scoreactuel) # lui donne le score atteint jusque la, vaut 0 si le niveau est à 1
