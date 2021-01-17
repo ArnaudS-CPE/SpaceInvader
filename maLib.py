@@ -88,8 +88,6 @@ class Alien:
         
         # touche le bord gauche du canvas
         if self.__posX+DX < 3:
-            for key in dicoAlien.keys():
-                key.__posY += DY # déplacement vertical vers le bas
             DX = -DX # changement de sens de déplacement
         
         # vérifie la présence de l'alien dans le dictionnaire / si il est touché, pour le supprimer du canevas
