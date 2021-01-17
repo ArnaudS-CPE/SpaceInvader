@@ -103,6 +103,7 @@ def jeu(scoreactuel, niveau):
             alien1.createurTir() # initie le tir des aliens
 
         else:
+            mL.freqTirAlienBonus = int(mL.freqTirAlienBonus / (niveau//3))
             alienbonus = mL.AlienBonus(100, 100, 200, 80, vaisseau, canevas, mw) # instanciation alienbonus
             alienbonus.createurTirBonus() # initie le tir de l'alien
 
